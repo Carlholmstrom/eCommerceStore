@@ -1,4 +1,5 @@
 using eCommerceStore.API.Data;
+using eCommerceStore.API.Dto;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,45 @@ public class StoreRepository : IStoreRepository
     {
         return await _context.Stores.FirstOrDefaultAsync(x => x.Id == id);
     }
+
+    public async Task<IEnumerable<Product>> GetStoreProductsAsync(int storeId)
+    {
+        return await _context.Products.Where(x => x.StoreId == storeId).ToListAsync();
+    }
+
+    public async Task<Product> AddProductToStoreAsync(int storeId, ProductCreateDto productDto)
+    {
+        var product = new Product
+        {
+            Title = productDto.Title,
+            Description = productDto.Description,
+            ImageUrl = productDto.ImageUrl,
+            Price = productDto.Price,
+            Quantity = productDto.Quantity,
+            Category = productDto.Category,
+            StoreId = storeId
+        };
+
+        await _context.AddAsync(product);
+        await _context.SaveChangesAsync();
+        return product;
+    }
+
+    public async Task<Product> DeleteProductFromStoreAsync(int storeId, int productId)
+    {
+        var product = await _context.Products.FirstOrDefaultAsync(x => x.StoreId == storeId && x.Id == productId);
+
+        if (product == null)
+        {
+            return null;
+        }
+
+        _context.Products.Remove(product);
+        await _context.SaveChangesAsync();
+        return product;
+    }
+
+
 
     public async Task<Store> AddAsync(Store store)
     {

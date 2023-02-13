@@ -1,12 +1,14 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using eCommerceStore.API.Data;
+using eCommerceStore.API.Helper;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NuGet.Protocol;
 using TokenHandler = Microsoft.IdentityModel.Tokens.TokenHandler;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,7 +66,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         });
 
+
 var app = builder.Build();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -75,7 +80,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(x => x
     .AllowAnyHeader()
     .AllowAnyMethod()
-    .WithOrigins("http://localhost:3000"));
+    .WithOrigins("http://localhost:5173"));
 
 
 app.UseHttpsRedirection();

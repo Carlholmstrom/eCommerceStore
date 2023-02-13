@@ -20,6 +20,7 @@ public class TokenHandler : ITokenHandler
         var claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.Email, user.Email));
         claims.Add((new Claim(ClaimTypes.Role, user.Role)));
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
         // user.Roles.ForEach((role) =>
         // {
         //     claims.Add(new Claim(ClaimTypes.Role, role));

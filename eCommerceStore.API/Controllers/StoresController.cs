@@ -1,29 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using eCommerceStore.API.Data;
+using eCommerceStore.API.Dto;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace eCommerceStore.API
+namespace eCommerceStore.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class StoresController : ControllerBase
     {
         private readonly IStoreRepository _storeRepository;
+        private readonly IConfiguration _configuration;
 
-        public StoresController(IStoreRepository storeRepository)
+        public StoresController(IStoreRepository storeRepository, IConfiguration configuration)
         {
             _storeRepository = storeRepository;
+            _configuration = configuration;
         }
 
-        // GET: api/Stores
         [HttpGet]
+        [Authorize(Roles = "user, admin, super-admin")]
         public async Task<IEnumerable<Store>> GetStoresAsync()
         {
             return await _storeRepository.GetAllAsync();
@@ -32,6 +29,7 @@ namespace eCommerceStore.API
         [HttpGet]
         [Route("{id:int}")]
         [ActionName("GetStoreAsync")]
+        [Authorize(Roles = "user, admin, super-admin")]
         public async Task<IActionResult> GetStoreAsync(int id)
         {
             var store = await _storeRepository.GetAsync(id);
@@ -43,63 +41,64 @@ namespace eCommerceStore.API
 
             return Ok(store);
         }
-
-        // PUT: api/Stores/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStore(int id, Store store)
+        
+        [HttpGet("{id:int}/product")]
+        [ActionName("GetStoreProductsAsync")]
+        [Authorize(Roles = "user, admin, super-admin")]
+        public async Task<IActionResult> GetStoreProductsAsync(int id)
         {
-            if (id != store.Id)
+            if (!_storeRepository.StoreExists(id))
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            await _storeRepository.AddAsync(store);
+            var products = await _storeRepository.GetStoreProductsAsync(id);
 
-           
-                if (!_storeRepository.StoreExists(id))
-                {
-                    return NotFound();
-                }
-                
+            return Ok(products);
+        }
+        
+        [HttpPost("{id:int}/product")]
+        [ActionName("AddProductToStoreAsync")]
+        [Authorize(Roles = "admin, super-admin")]
+        public async Task<IActionResult> AddProductToStoreAsync(int id, [FromBody] ProductCreateDto productDto)
+        {
+            if (!_storeRepository.StoreExists(id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var addedProduct = await _storeRepository.AddProductToStoreAsync(id, productDto);
+
+            return CreatedAtAction("GetStoreProductsAsync", new { id = addedProduct.Id }, addedProduct);
+        }
+
+        [HttpDelete("{storeId:int}/product/{id:int}")]
+        [ActionName("DeleteProductFromStoreAsync")]
+        [Authorize(Roles = "admin, super-admin")]
+        public async Task<IActionResult> DeleteProductFromStoreAsync(int storeId, int id)
+        {
+            if (!_storeRepository.StoreExists(storeId))
+            {
+                return NotFound();
+            }
+
+            var deletedProduct = await _storeRepository.DeleteProductFromStoreAsync(storeId, id);
+
+            if (deletedProduct == null)
+            {
+                return NotFound();
+            }
 
             return NoContent();
         }
 
-        // POST: api/Stores
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        // [HttpPost]
-        // public async Task<ActionResult<Store>> PostStore(Store store)
-        // {
-        //   if (_context.Stores == null)
-        //   {
-        //       return Problem("Entity set 'AppDbContext.Stores'  is null.");
-        //   }
-        //     _context.Stores.Add(store);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetStore", new { id = store.Id }, store);
-        // }
-        //
-        // // DELETE: api/Stores/5
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> DeleteStore(int id)
-        // {
-        //     if (_context.Stores == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     var store = await _context.Stores.FindAsync(id);
-        //     if (store == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _context.Stores.Remove(store);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return NoContent();
-        // }
+
+       
 
     }
 }
