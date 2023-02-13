@@ -1,6 +1,8 @@
 using eCommerceStore.API.Data;
+using eCommerceStore.API.Dto;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCommerceStore.API.Repositories;
 
@@ -12,42 +14,95 @@ public class UserRepository : IUserRepository
     {
         _context = context;
     }
-    public ICollection<User> GetUsers()
+
+    public async Task<User> AuthenticateAsync(string email, string password)
     {
-        return _context.Users.ToList();
+        var user = await _context.Users.FirstOrDefaultAsync(
+            x => x.Email.ToLower() == email.ToLower() && x.Password == password);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        var userRoles = await _context.UsersRoles.Where(x => x.UserId == user.Id).ToListAsync();
+
+        if (userRoles.Any())
+        {
+            user.Roles = new List<string>();
+            foreach (var userRole in userRoles)
+            {
+                var role = await _context.Roles.FirstOrDefaultAsync(x => x.Id == userRole.RoleId);
+                if (role != null)
+                {
+                    user.Roles.Add(role.Name);
+                }
+            }
+        }
+
+        user.Password = null;
+        return user;
     }
 
-    public User GetUser(int userId)
+    public async Task<IEnumerable<UserDto>> GetAllUsersWithStoreNameAsync()
     {
-        return _context.Users.Where(x => x.Id == userId).FirstOrDefault();
+        return await _context.Users
+            .Include(x => x.Store)
+            .Select(x => new UserDto()
+            {
+                Email = x.Email,
+                Role = x.Role,
+                StoreName = x.Store.Name
+            })
+            .ToListAsync();
     }
 
-    public bool UserExists(int userId)
+    public async Task<List<User>> GetAllAsync()
     {
-        return _context.Users.Any(x => x.Id == userId);
+        return await _context.Users.ToListAsync();
     }
 
-    public bool CreateUser(User user)
+
+    public Task<User> GetAsync(int id)
     {
-        _context.Add(user);
-        return Save();
+        throw new NotImplementedException();
     }
 
-    public bool UpdateUser(User user)
+
+    // public async Task<User> GetAsync(int id)
+    // {
+    //     return await _context.Users
+    //         .FirstOrDefaultAsync(x => x.Id == id);
+    // }
+
+    public async Task<User> AddAsync(User user)
     {
-        _context.Update(user);
-        return Save();
+        await _context.AddAsync(user);
+        await _context.SaveChangesAsync();
+        return user;
     }
 
-    public bool DeleteUser(User user)
+    public async Task<User> DeleteAsync(int id)
     {
-        _context.Remove(user);
-        return Save();
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+        return user;
     }
 
-    public bool Save()
+    public async Task<User> UpdateAsync(int id, User user)
     {
-        var saved = _context.SaveChanges();
-        return saved > 0 ? true : false;
+        throw new NotImplementedException();
+    }
+
+    public bool UserExists(int id)
+    {
+        return _context.Users.Any(x => x.Id == id);
     }
 }

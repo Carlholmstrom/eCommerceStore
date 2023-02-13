@@ -1,6 +1,7 @@
 using eCommerceStore.API.Data;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCommerceStore.API.Repositories;
 
@@ -12,43 +13,58 @@ public class ProductRepository : IProductsRepository
     {
         _context = context;
     }
-    
-    public ICollection<Product> GetProducts()
+    public async Task<IEnumerable<Product>> GetAllAsync()
     {
-        return _context.Products.ToList();
+        return await _context.Products.ToListAsync();
     }
 
-    public Product GetProduct(int productId)
+    public async Task<Product> GetAsync(int id)
     {
-        return _context.Products.Where(x => x.Id == productId).FirstOrDefault();
+        return await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public bool ProductExists(int productId)
+    public async Task<Product> AddAsync(Product product)
     {
-        return _context.Products.Any(x => x.Id == productId);
+        await _context.AddAsync(product);
+        await _context.SaveChangesAsync();
+        return product;
     }
 
-    public bool CreateProduct(Product product)
+    public async Task<Product> DeleteAsync(int id)
     {
-        _context.Add(product);
-        return Save();
+        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (product == null)
+        {
+            return null;
+        }
+
+        _context.Products.Remove(product);
+        await _context.SaveChangesAsync();
+        return product;
     }
 
-    public bool UpdateProduct(Product product)
+    public async Task<Product> UpdateAsync(int id, Product product)
     {
-        _context.Update(product);
-        return Save();
-    }
+        var existingProduct = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
 
-    public bool DeleteProduct(Product product)
-    {
-        _context.Remove(product);
-        return Save();
-    }
+        if (existingProduct  == null)
+        {
+            return null;
+        }
 
-    public bool Save()
-    {
-        var saved = _context.SaveChanges();
-        return saved > 0 ? true : false;
+        existingProduct.Id = product.Id;
+        existingProduct.Title = product.Title;
+        existingProduct.Description = product.Description;
+        existingProduct.ImageUrl = product.ImageUrl;
+        existingProduct.Price = product.Price;
+        existingProduct.Quantity = product.Quantity;
+        existingProduct.Category = product.Category;
+        existingProduct.Store = product.Store;
+        existingProduct.StoreId = product.StoreId;
+        
+        await _context.SaveChangesAsync();
+
+        return existingProduct;
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,82 +9,65 @@ using eCommerceStore.API.Data;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
 
-namespace eCommerceStore.API.Controllers
+namespace eCommerceStore.API
 {
     [Route("api/[controller]")]
     [ApiController]
     public class StoresController : ControllerBase
     {
         private readonly IStoreRepository _storeRepository;
-        private readonly IMapper _mapper;
 
-        public StoresController(IStoreRepository storeRepository, IMapper mapper)
+        public StoresController(IStoreRepository storeRepository)
         {
             _storeRepository = storeRepository;
-            _mapper = mapper;
         }
 
-        // GET: api/Users
+        // GET: api/Stores
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Store>))]
-        public IActionResult GetStores()
+        public async Task<IEnumerable<Store>> GetStoresAsync()
         {
-            var stores =  _storeRepository.GetStores();
-            
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            return Ok(stores);
+            return await _storeRepository.GetAllAsync();
         }
 
-        [HttpGet("{storeId}")]
-        [ProducesResponseType(200, Type = typeof(Store))]
-        [ProducesResponseType(400)]
-        public IActionResult GetStore(int storeId)
+        [HttpGet]
+        [Route("{id:int}")]
+        [ActionName("GetStoreAsync")]
+        public async Task<IActionResult> GetStoreAsync(int id)
         {
-            if (!_storeRepository.StoreExists(storeId))
+            var store = await _storeRepository.GetAsync(id);
+
+            if (store == null)
+            {
                 return NotFound();
-
-            var store = _storeRepository.GetStore(storeId);
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            }
 
             return Ok(store);
         }
+
         // PUT: api/Stores/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutStore(int id, Store store)
-        // {
-        //     if (id != store.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     _context.Entry(store).State = EntityState.Modified;
-        //
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!StoreExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
-        // // POST: api/Stores
-        // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutStore(int id, Store store)
+        {
+            if (id != store.Id)
+            {
+                return BadRequest();
+            }
+
+            await _storeRepository.AddAsync(store);
+
+           
+                if (!_storeRepository.StoreExists(id))
+                {
+                    return NotFound();
+                }
+                
+
+            return NoContent();
+        }
+
+        // POST: api/Stores
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         // [HttpPost]
         // public async Task<ActionResult<Store>> PostStore(Store store)
         // {
@@ -118,10 +100,6 @@ namespace eCommerceStore.API.Controllers
         //
         //     return NoContent();
         // }
-        //
-        // private bool StoreExists(int id)
-        // {
-        //     return (_context.Stores?.Any(e => e.Id == id)).GetValueOrDefault();
-        // }
+
     }
 }

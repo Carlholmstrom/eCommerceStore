@@ -4,11 +4,14 @@ namespace eCommerceStore.API.Interfaces;
 
 public interface IStoreRepository
 {
-    ICollection<Store> GetStores();
-    Store GetStore(int storeId);
-    bool StoreExists(int storeId);
-    bool CreateStore (Store store);
-    bool UpdateStore(Store store);
-    bool DeleteStore(Store store);
-    bool Save();
+    Task<IEnumerable<Store>> GetAllAsync();
+
+    Task<Store> GetAsync(int id);
+
+    Task<Store> AddAsync(Store store);
+
+    Task<Store> DeleteAsync(int id);
+
+    Task<Store> UpdateAsync(int id, Store store);
+    bool StoreExists(int id);
 }

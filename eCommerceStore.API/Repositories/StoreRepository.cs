@@ -1,6 +1,7 @@
 using eCommerceStore.API.Data;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCommerceStore.API.Repositories;
 
@@ -12,43 +13,59 @@ public class StoreRepository : IStoreRepository
     {
         _context = context;
     }
-    
-    public ICollection<Store> GetStores()
+
+
+    public async Task<IEnumerable<Store>> GetAllAsync()
     {
-        return _context.Stores.ToList();
+        return await _context.Stores.ToListAsync();
     }
 
-    public Store GetStore(int storeId)
+    public async Task<Store> GetAsync(int id)
     {
-        return _context.Stores.Where(x => x.Id == storeId).FirstOrDefault();
+        return await _context.Stores.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public bool StoreExists(int storeId)
+    public async Task<Store> AddAsync(Store store)
     {
-        return _context.Stores.Any(x => x.Id == storeId);
+        await _context.AddAsync(store);
+        await _context.SaveChangesAsync();
+        return store;
     }
 
-    public bool CreateStore(Store store)
+    public async Task<Store> DeleteAsync(int id)
     {
-        _context.Add(store);
-        return Save();
+        var store = await _context.Stores.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (store == null)
+        {
+            return null;
+        }
+
+        _context.Stores.Remove(store);
+        await _context.SaveChangesAsync();
+        return store;
+
     }
 
-    public bool UpdateStore(Store store)
+    public async Task<Store> UpdateAsync(int id, Store store)
     {
-        _context.Update(store);
-        return Save();
+        var existingStore = await _context.Stores.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (existingStore  == null)
+        {
+            return null;
+        }
+
+        existingStore.Id = store.Id;
+        existingStore.Name = store.Name;
+        
+        await _context.SaveChangesAsync();
+
+        return existingStore;
     }
 
-    public bool DeleteStore(Store store)
+    public bool StoreExists(int id)
     {
-        _context.Remove(store);
-        return Save();
-    }
-
-    public bool Save()
-    {
-        var saved = _context.SaveChanges();
-        return saved > 0 ? true : false;
+            return _context.Stores.Any(x => x.Id == id);
     }
 }

@@ -4,11 +4,13 @@ namespace eCommerceStore.API.Interfaces;
 
 public interface IProductsRepository
 {
-    ICollection<Product> GetProducts();
-    Product GetProduct(int productId);
-    bool ProductExists(int productId);
-    bool CreateProduct (Product product);
-    bool UpdateProduct(Product product);
-    bool DeleteProduct(Product product);
-    bool Save();
+    Task<IEnumerable<Product>> GetAllAsync();
+
+    Task<Product> GetAsync(int id);
+
+    Task<Product> AddAsync(Product product);
+
+    Task<Product> DeleteAsync(int id);
+
+    Task<Product> UpdateAsync(int id, Product product);
 }
