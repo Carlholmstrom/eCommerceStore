@@ -8,6 +8,7 @@ public interface IUserRepository
     Task<User> AuthenticateAsync(string email, string password);
     Task<IEnumerable<UserDto>> GetAllUsersWithStoreNameAsync();
     Task<List<User>> GetAllAsync();
+    Task<User> GetUserByEmail(string email);
 
     Task<User> GetAsync(int id);
 

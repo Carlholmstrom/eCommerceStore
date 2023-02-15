@@ -10,6 +10,6 @@ public class MappingProfiles : Profile
     {
         CreateMap<RegisterDto, User>();
         CreateMap<User, UserDto>();
-        CreateMap<UserDto, User>();
+ 
     }
 }

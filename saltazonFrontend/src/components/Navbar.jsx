@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useCookies } from "react-cookie";
 import "./Navbar.css";
 
-function NavBar({ token, setToken }) {
+function NavBar() {
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+
   const handleLogout = () => {
-    setToken(null);
-    localStorage.removeItem("token");
+    removeCookie("token");
   };
 
   return (
@@ -16,7 +17,7 @@ function NavBar({ token, setToken }) {
             SHOW ME ALL THE ITEMS
           </Link>
         </li>
-        {token ? (
+        {cookies.token ? (
           <li>
             <Link className={"nav_button"} onClick={() => handleLogout()}>
               Logout

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Product from "./Product.jsx";
 import "../../App.css";
 import CategorySorter from "./CategorySorter.jsx";
+import { useCookies } from "react-cookie";
 
 const sorted = false;
 
@@ -26,15 +27,25 @@ function sortSomething(category) {
 
 function ProductList({ products, addToCart }) {
   const [productData, setProductData] = useState([]);
+  const [cookies] = useCookies(["token"]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch("http://localhost:5179/api/Products");
-      const data = await response.json();
-      setProductData(data);
+      const token = cookies.token;
+      console.log(cookies);
+      console.log(token);
+      if (token) {
+        const response = await fetch("http://localhost:5179/api/Products", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        setProductData(data);
+      }
     };
     fetchProducts();
-  }, []);
+  }, [cookies]);
 
   let sortedProducts;
   if (sorted) {

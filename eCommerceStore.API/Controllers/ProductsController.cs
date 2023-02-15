@@ -2,6 +2,7 @@ using AutoMapper;
 using eCommerceStore.API.Data;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "user, admin, super-admin")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
     public async Task<IActionResult> GetAllProductsAsync()
     {

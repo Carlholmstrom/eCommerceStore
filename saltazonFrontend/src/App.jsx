@@ -9,6 +9,7 @@ import ProductList from "./components/Products/ProductList.jsx";
 import LoginForm from "./components/login/LoginForm.jsx";
 import NewUserForm from "./components/login/NewUserForm.jsx";
 import SuperAdminPage from "./admin/SuperAdminPage.jsx";
+import { fakeProducts } from "./fakedata/fakedata";
 
 function addToCart(productId) {
   console.log("Add " + productId + " From the App");
@@ -26,7 +27,20 @@ function getCurrentCart() {
 
 function App() {
   const [token, setToken] = useState(null);
-  const [currentCart, setCurrentCart] = useState(getCurrentCart());
+  const [currentCart, setCurrentCart] = useState([]);
+  const [userInfo, setUserInfo] = useState({
+    id: 0,
+    email: "",
+    role: "",
+    storeId: 0,
+  });
+
+  useEffect(() => {
+    const getCurrentCart = () => {
+      // Update to get from local storage
+    };
+    setCurrentCart(getCurrentCart());
+  }, []);
 
   const handleLogin = (token) => {
     setToken(token);
@@ -43,27 +57,33 @@ function App() {
           <Route
             exact
             path="/create-new-user"
-            element={<NewUserForm />}
-          ></Route>
+            element={<NewUserForm onSubmit={handleLogin} />}
+          />
           <Route
             exact
             path="/login"
-            element={<LoginForm onSubmit={handleLogin} />}
-          ></Route>
+            element={
+              <LoginForm
+                onSubmit={handleLogin}
+                setUserInfo={setUserInfo}
+                userInfo={userInfo}
+              />
+            }
+          />
           <Route
             exact
             path="/"
             element={<ProductList addToCart={addToCart} />}
-          ></Route>
+          />
           <Route
             exact
             path="/cart"
             element={
               <Cart products={currentCart} removeFromCart={removeFromCart} />
             }
-          ></Route>
-          <Route exact path="/admin" element={<AdminPage />}></Route>
-          <Route exact path="/admin/super" element={<SuperAdminPage />}></Route>
+          />
+          <Route exact path="/admin" element={<AdminPage />} />
+          <Route exact path="/admin/super" element={<SuperAdminPage />} />
         </Routes>
       </Router>
     </div>
