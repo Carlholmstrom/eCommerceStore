@@ -1,6 +1,12 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { CookiesProvider, withCookies, Cookies } from "react-cookie";
 import NavBar from "./components/Navbar.jsx";
 import Cart from "./components/checkout/Cart.jsx";
 import AdminPage from "./admin/AdminPage.jsx";
@@ -34,6 +40,7 @@ function App() {
     storeId: 0,
   });
   const [productData, setProductData] = useState([]);
+  const cookies = new Cookies();
 
   useEffect(() => {
     const getCurrentCart = () => {

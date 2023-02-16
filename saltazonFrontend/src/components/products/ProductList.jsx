@@ -2,7 +2,15 @@ import React, { useState, useEffect } from "react";
 import Product from "./Product.jsx";
 import CategorySorter from "./CategorySorter.jsx";
 import { useCookies } from "react-cookie";
-import { Box } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 const sorted = false;
 
@@ -32,8 +40,6 @@ function ProductList({ addToCart }) {
   useEffect(() => {
     const fetchProducts = async () => {
       const token = cookies.token;
-      console.log(cookies);
-      console.log(token);
       if (token) {
         const response = await fetch("http://localhost:5179/api/Products", {
           headers: {
@@ -41,6 +47,7 @@ function ProductList({ addToCart }) {
           },
         });
         const data = await response.json();
+        console.log(data);
         setProductData(data);
       }
     };
@@ -57,19 +64,13 @@ function ProductList({ addToCart }) {
   }
 
   return (
-    <Box display="flex" flexDirection="column">
-      <Box>
-        <CategorySorter
-          categories={["First Category", "Second Category"]}
-          sorterFunction={sortSomething}
-        />
-      </Box>
-      <Box>
-        {sortedProducts.map((p) => {
-          return <Product key={p.id} product={p} addToCart={addToCart} />;
-        })}
-      </Box>
-    </Box>
+    <Grid container spacing={2}>
+      {sortedProducts.map((p) => (
+        <Grid item xs={12} sm={6} md={4} key={p.id}>
+          <Product product={p} addToCart={addToCart} />
+        </Grid>
+      ))}
+    </Grid>
   );
 }
 
