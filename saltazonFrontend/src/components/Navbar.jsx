@@ -1,47 +1,56 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import "./Navbar.css";
+import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function NavBar() {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     removeCookie("token");
+    navigate("/login");
   };
 
   return (
-    <nav className={"navbar"}>
-      <ul>
-        <li>
-          <Link to={"/"} className={"nav_button"}>
-            SHOW ME ALL THE ITEMS
-          </Link>
-        </li>
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6" style={{ flexGrow: 1 }}></Typography>
+        <Link
+          to={"/"}
+          style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+        >
+          Show me all the items
+        </Link>
+
+        <Link
+          to={"/create-new-user"}
+          style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+        >
+          Create new user
+        </Link>
+        <Link
+          to={"/cart"}
+          style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+        >
+          Go to cart
+        </Link>
         {cookies.token ? (
-          <li>
-            <Link className={"nav_button"} onClick={() => handleLogout()}>
+          <>
+            <Button color="inherit" onClick={() => handleLogout()}>
               Logout
-            </Link>
-          </li>
+            </Button>
+          </>
         ) : (
-          <li>
-            <Link to={"/login"} className={"nav_button"}>
-              Login
-            </Link>
-          </li>
+          <Link
+            to={"/login"}
+            style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+          >
+            Login
+          </Link>
         )}
-        <li>
-          <Link to={"/create-new-user"} className={"nav_button"}>
-            Create new user
-          </Link>
-        </li>
-        <li>
-          <Link to={"/cart"} className={"nav_button"}>
-            Go to cart
-          </Link>
-        </li>
-      </ul>
-    </nav>
+      </Toolbar>
+    </AppBar>
   );
 }
 
