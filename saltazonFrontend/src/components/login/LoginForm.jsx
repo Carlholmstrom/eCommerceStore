@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { TextField, Button } from "@mui/material";
 
 function LoginForm({ onSubmit, userInfo, setUserInfo }) {
   const navigate = useNavigate();
@@ -74,6 +75,7 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
           decodedPayload[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
           ];
+        console.log(id);
       } else {
         alert("Login failed");
       }
@@ -87,16 +89,18 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
     <>
       <h3>Login</h3>
       <form onSubmit={handleSubmit} className="login_form">
-        <label htmlFor="email_input">Email</label>
-        <input
+        <TextField
+          sx={{ m: 1, width: 300 }}
+          label="Email"
           placeholder="email"
           id="email_input"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
         <br />
-        <label htmlFor="password_input">Password</label>
-        <input
+        <TextField
+          sx={{ m: 1, width: 300 }}
+          label="Password"
           type="password"
           placeholder="password"
           id="password_input"
@@ -104,7 +108,14 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
           onChange={(event) => setPassword(event.target.value)}
         />
         <br />
-        <input type="submit" />
+        <Button
+          sx={{ m: 3, width: 300 }}
+          variant="contained"
+          color="primary"
+          type="submit"
+        >
+          Login
+        </Button>
       </form>
     </>
   );
