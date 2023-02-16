@@ -13,7 +13,6 @@ import ProfileBar from "./components/ProfileBar.jsx";
 
 function addToCart(productId) {
   console.log("Add " + productId + " From the App");
-  //add item to the current Cart
 }
 
 function removeFromCart(productId) {
@@ -34,6 +33,7 @@ function App() {
     role: "",
     storeId: 0,
   });
+  const [productData, setProductData] = useState([]);
 
   useEffect(() => {
     const getCurrentCart = () => {
@@ -74,13 +74,18 @@ function App() {
             <Route
               exact
               path="/"
-              element={<ProductList addToCart={addToCart} />}
+              element={
+                <ProductList productData={productData} addToCart={addToCart} />
+              }
             />
             <Route
               exact
               path="/cart"
               element={
-                <Cart products={currentCart} removeFromCart={removeFromCart} />
+                <Cart
+                  productData={productData}
+                  removeFromCart={removeFromCart}
+                />
               }
             />
             <Route exact path="/admin" element={<AdminPage />} />
