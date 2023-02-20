@@ -67,10 +67,10 @@ namespace eCommerceStore.API.Controllers
                 return NotFound();
             }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            // if (!ModelState.IsValid)
+            // {
+            //     return BadRequest(ModelState);
+            // }
 
             var addedProduct = await _storeRepository.AddProductToStoreAsync(id, productDto);
 

@@ -15,5 +15,4 @@ public class ProductCreateDto
     [Required]
     public int Quantity { get; set; }
     public string Category { get; set; }
-    public int StoreId { get; set; }
 }
