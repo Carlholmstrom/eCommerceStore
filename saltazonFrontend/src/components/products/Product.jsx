@@ -24,12 +24,12 @@ function Product({ product, addToCart }) {
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           {product.description.substring(0, 40) + "..."}
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-          <Button variant="contained" onClick={() => addToCart(product.id)}>
-            Add to Cart
-          </Button>
-        </Box>
       </CardContent>
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+        <Button variant="contained" onClick={() => addToCart(product.id)}>
+          Add to Cart
+        </Button>
+      </Box>
     </Card>
   );
 }

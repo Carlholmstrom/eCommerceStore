@@ -21,7 +21,10 @@ public class AuthController : Controller
     [Route("login")]
     public async Task<IActionResult> LoginAsync(LoginDto loginDto)
     {
-
+        if (loginDto == null)
+        {
+            return BadRequest("Please provide valid credentials");
+        }
         var user = await _userRepository.AuthenticateAsync(
             loginDto.Email, loginDto.Password);
 

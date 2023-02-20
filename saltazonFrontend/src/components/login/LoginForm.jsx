@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { TextField, Button } from "@mui/material";
+import validator from "validator";
 
 function LoginForm({ onSubmit, userInfo, setUserInfo }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
+  const [emailError, setEmailError] = useState(false);
 
   // const getUserData = async (id) => {
   //   try {
@@ -43,7 +45,14 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
   // };
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     try {
+      if (!validator.isEmail(email)) {
+        setEmailError(true);
+        return;
+      } else {
+        setEmailError(false);
+      }
       const response = await fetch("http://localhost:5179/Auth/Login", {
         method: "POST",
         headers: {
@@ -87,7 +96,7 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
 
   return (
     <>
-      <h3>Login</h3>
+      <h3>Loginnnnn</h3>
       <form onSubmit={handleSubmit} className="login_form">
         <TextField
           sx={{ m: 1, width: 300 }}
@@ -96,6 +105,8 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
           id="email_input"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
+          error={emailError}
+          helperText={emailError ? "Please enter a valid email address" : ""}
         />
         <br />
         <TextField

@@ -14,7 +14,6 @@ import ProductList from "./components/Products/ProductList.jsx";
 import LoginForm from "./components/login/LoginForm.jsx";
 import NewUserForm from "./components/login/NewUserForm.jsx";
 import SuperAdminPage from "./admin/SuperAdminPage.jsx";
-import { fakeProducts } from "./fakedata/fakedata";
 import ProfileBar from "./components/ProfileBar.jsx";
 
 function addToCart(productId) {
