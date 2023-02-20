@@ -10,7 +10,6 @@ function AdminProduct({ product, updateQuantity, storeId }) {
       const decodedToken = jwt_decode(token);
       const storeId = decodedToken.storeId;
       console.log(storeId);
-      console.log("Inne i if");
       const response = await fetch(
         `http://localhost:5179/api/Stores/${storeId}/product/${product.id}`,
         {
