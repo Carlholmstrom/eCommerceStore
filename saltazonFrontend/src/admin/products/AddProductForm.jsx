@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
+import { Grid, Typography, TextField, Button } from "@mui/material";
 
 function AddProductForm({ storeId }) {
   const [cookies] = useCookies(["token"]);
@@ -54,69 +55,99 @@ function AddProductForm({ storeId }) {
   };
 
   return (
-    <>
-      <h4>Add new Product</h4>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title_input">Title</label>
-        <input
-          name="title"
-          placeholder="title of product"
-          id="title_input"
-          value={product.title}
-          onChange={handleInputChange}
-        />
-        <br />
-        <label htmlFor="description_input">Description</label>
-        <textarea
-          name="description"
-          placeholder="description of product"
-          id="description_input"
-          value={product.description}
-          onChange={handleInputChange}
-        ></textarea>
-        <br />
-        <label htmlFor="quantity_input">Quantity</label>
-        <input
-          name="quantity"
-          type="number"
-          placeholder={1}
-          id="quantity_input"
-          value={product.quantity}
-          onChange={handleInputChange}
-        />
-        <br />
-        <label htmlFor="price_input">Price</label>
-        <input
-          name="price"
-          type="number"
-          id="price_input"
-          value={product.price}
-          onChange={handleInputChange}
-        />
-        <br />
-        <label htmlFor="category_input">Category</label>
-        <input
-          name="category"
-          type="text"
-          placeholder="category"
-          id="category_input"
-          value={product.category}
-          onChange={handleInputChange}
-        />
-        <br />
-        <label htmlFor="imageUrl_input">Image URL</label>
-        <input
-          name="imageUrl"
-          type="text"
-          placeholder="URL of product image"
-          id="imageUrl_input"
-          value={product.imageUrl}
-          onChange={handleInputChange}
-        />
-        <br />
-        <button type="submit">Add product</button>
-      </form>
-    </>
+    <form onSubmit={handleSubmit}>
+      <Grid container spacing={2} direction="column">
+        <Grid item xs={12}>
+          <Typography variant="h4" gutterBottom>
+            Add new Product
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          container
+          spacing={2}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Title"
+              name="title"
+              placeholder="title of product"
+              value={product.title}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ width: "100%" }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Description"
+              name="description"
+              placeholder="description of product"
+              value={product.description}
+              onChange={handleInputChange}
+              multiline
+              fullWidth
+              sx={{ width: "100%" }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Quantity"
+              name="quantity"
+              type="number"
+              placeholder="1"
+              value={product.quantity}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ width: "100%" }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Price"
+              name="price"
+              type="number"
+              value={product.price}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ width: "100%" }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Category"
+              name="category"
+              type="text"
+              placeholder="category"
+              value={product.category}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ width: "100%" }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Image URL"
+              name="imageUrl"
+              type="text"
+              placeholder="URL of product image"
+              value={product.imageUrl}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ width: "100%" }}
+            />
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Button type="submit" variant="contained" color="primary">
+            Add product
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
   );
 }
 

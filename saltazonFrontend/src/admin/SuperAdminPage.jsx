@@ -3,6 +3,7 @@ import AddStoreForm from "./AddStoreForm.jsx";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
+import { Typography, Button, Link, Grid } from "@mui/material";
 
 function SuperAdminPage() {
   const [stores, setStores] = useState([]);
@@ -33,15 +34,27 @@ function SuperAdminPage() {
   }, [cookies]);
 
   return (
-    <>
-      <header>Welcome Almighty SuperAdmin {currentUser}</header>
-      <AddStoreForm />
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Typography variant="h6" gutterBottom>
+          Welcome Almighty SuperAdmin: {currentUser}
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <AddStoreForm />
+      </Grid>
       {stores.map((store) => (
-        <StoreOverview
-          storeInfo={{ id: store.id, name: store.name, adminId: store.adminId }}
-        />
+        <Grid item key={store.id} xs={12} sm={6} md={4}>
+          <StoreOverview
+            storeInfo={{
+              id: store.id,
+              name: store.name,
+              adminId: store.adminId,
+            }}
+          />
+        </Grid>
       ))}
-    </>
+    </Grid>
   );
 }
 

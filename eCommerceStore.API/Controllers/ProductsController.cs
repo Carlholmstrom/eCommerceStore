@@ -1,5 +1,6 @@
 using AutoMapper;
 using eCommerceStore.API.Data;
+using eCommerceStore.API.Dto;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -48,6 +49,24 @@ public class ProductsController : ControllerBase
 
         return Ok(product);
     }
+    
+    [HttpPut]
+    [Route("{id:int}/quantity")]
+    [Authorize(Roles = "admin, super-admin")]
+    public async Task<IActionResult> UpdateQuantityAsync(int id, [FromBody] int newQuantity)
+    {
+        var product = await _productsRepository.UpdateQuantityAsync(id, newQuantity);
 
-   
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(product);
+    }
+
+ 
+
+
+
 }

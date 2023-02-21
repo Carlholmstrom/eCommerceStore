@@ -53,53 +53,58 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Router>
-        <header className={"top_header"}>
-          <NavBar token={token} setToken={setToken} />
-        </header>
-        <main>
-          <ProfileBar />
-          <Routes>
-            <Route
-              exact
-              path="/create-new-user"
-              element={<NewUserForm onSubmit={handleLogin} />}
-            />
-            <Route
-              exact
-              path="/login"
-              element={
-                <LoginForm
-                  onSubmit={handleLogin}
-                  setUserInfo={setUserInfo}
-                  userInfo={userInfo}
-                />
-              }
-            />
-            <Route
-              exact
-              path="/"
-              element={
-                <ProductList productData={productData} addToCart={addToCart} />
-              }
-            />
-            <Route
-              exact
-              path="/cart"
-              element={
-                <Cart
-                  productData={productData}
-                  removeFromCart={removeFromCart}
-                />
-              }
-            />
-            <Route exact path="/admin" element={<AdminPage />} />
-            <Route exact path="/admin/super" element={<SuperAdminPage />} />
-          </Routes>
-        </main>
-      </Router>
-    </div>
+
+      <div className="App">
+        <Router>
+          <header className={"top_header"}>
+            <NavBar token={token} setToken={setToken} />
+          </header>
+          <main>
+            <ProfileBar />
+            <Routes>
+              <Route
+                exact
+                path="/create-new-user"
+                element={<NewUserForm onSubmit={handleLogin} />}
+              />
+              <Route
+                exact
+                path="/login"
+                element={
+                  <LoginForm
+                    onSubmit={handleLogin}
+                    setUserInfo={setUserInfo}
+                    userInfo={userInfo}
+                  />
+                }
+              />
+              <Route
+                exact
+                path="/"
+                element={
+                  <ProductList
+                    productData={productData}
+                    addToCart={addToCart}
+                  />
+                }
+              />
+              <Route
+                exact
+                path="/cart"
+                element={
+                  <Cart
+                    productData={productData}
+                    removeFromCart={removeFromCart}
+                  />
+                }
+              />
+              <Route exact path="/admin" element={<AdminPage />} />
+              <Route exact path="/admin/super" element={<SuperAdminPage />} />
+            </Routes>
+          </main>
+        </Router>
+      </div>
+
   );
 }
 

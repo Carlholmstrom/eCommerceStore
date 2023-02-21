@@ -3,6 +3,7 @@ import AddProductForm from "./AddProductForm.jsx";
 import AdminProduct from "./AdminProduct.jsx";
 import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
+import { Grid, Typography } from "@mui/material";
 
 function AdminProductList({ storeName }) {
   const [products, setProducts] = useState([]);
@@ -30,13 +31,27 @@ function AdminProductList({ storeName }) {
   }, [storeId, token]);
 
   return (
-    <div>
-      <header>The items in {storeName}</header>
-      <AddProductForm />
-      {products.map((p) => {
-        return <AdminProduct key={p.id} product={p} />;
-      })}
-    </div>
+    <Grid
+      container
+      spacing={2}
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Grid item xs={12}>
+        <Typography variant="h4" align="center" gutterBottom>
+          The items in {storeName}
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <AddProductForm />
+      </Grid>
+      {products.map((p) => (
+        <Grid item key={p.id} xs={12} sm={6} md={4}>
+          <AdminProduct product={p} />
+        </Grid>
+      ))}
+    </Grid>
   );
 }
 

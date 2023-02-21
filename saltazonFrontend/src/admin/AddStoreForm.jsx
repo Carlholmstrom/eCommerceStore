@@ -1,8 +1,20 @@
 import { useState } from "react";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import {
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  Typography,
+} from "@mui/material";
 
 function AddStoreForm({}) {
+  const navigate = useNavigate();
   const [cookies] = useCookies(["token"]);
   const [newStore, setNewStore] = useState({
     name: "",
@@ -24,6 +36,7 @@ function AddStoreForm({}) {
       if (response.ok) {
         console.log("Store added successfully");
         alert("Store added successfully");
+        navigate("/admin/super");
         setNewStore({
           name: "",
         });
@@ -39,28 +52,33 @@ function AddStoreForm({}) {
   };
 
   return (
-    <>
-      <h4>Add new Product</h4>
+    <Box sx={{ margin: 2 }}>
+      <Typography variant="h5" gutterBottom>
+        Add new Store
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="name_input">Store Name</label>
-        <input
+        <TextField
+          sx={{ width: 300, mb: 2 }}
+          label="Store Name"
           name="name"
           placeholder="Store name"
           id="name_input"
           value={newStore.name}
           onChange={handleInputChange}
+          fullWidth
         />
-        <br />
-        {/* <label htmlFor={"admin_input"}>Admin Id</label>
-        <input type={"text"} id={"admin_input"} />
-        <br /> */}
-        <button type="submit">Add store</button>
-        <br />
-        {/* <button onClick={() => console.log("Added new store")}>
-          Add Store
-        </button> */}
+        <div>
+          <Button
+            sx={{ margin: 2 }}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            Add store
+          </Button>
+        </div>
       </form>
-    </>
+    </Box>
   );
 }
 

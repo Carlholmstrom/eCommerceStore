@@ -13,7 +13,7 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar sx={{ mb: 3 }} position="static" style={{ background: "#2E3B55" }}>
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}></Typography>
         <Link

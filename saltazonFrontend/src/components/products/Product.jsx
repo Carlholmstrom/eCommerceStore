@@ -10,7 +10,14 @@ import {
 
 function Product({ product, addToCart }) {
   return (
-    <Card sx={{ height: 350, maxWidth: 350, margin: 2, border: 1 }}>
+    <Card
+      sx={{
+        height: 350,
+        maxWidth: 350,
+        margin: 2,
+        border: 1,
+      }}
+    >
       <CardMedia
         component="img"
         sx={{ height: "50%" }}

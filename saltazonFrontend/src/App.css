@@ -1,38 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+
 #root {
-    text-align: center;
+  text-align: center;
+  font-family: "Anton", sans-serif;
+  letter-spacing: 1px;
 }
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* 
+.body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
 .App {
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  /* height: 100vw; */
+  /* background-image: radial-gradient(#35b6e5 5%, transparent 5%),
+    radial-gradient(#637d8e 5%, transparent 5%);
+  background-color: #fafafa;
+  background-position: 0 0, 50px 50px;
+  background-size: 100px 100px; */
+
+  /* background-color: #637d8e;
+  color: #fff; */
+  /* background: url("https://picsum.photos/id/475/1920/1080") no-repeat center
+    fixed;
+  background-size: cover; */
 }
 
-.top_header {
-    top: 0;
-    display: flex;
-    border-style: solid;
-    border-color: #242424;
-    width: 98%;
-}
+/* .top_header {
+  top: 0;
+  display: flex;
+  border-style: solid;
+  border-color: #242424;
+  width: 98%;
+} */
 
-.navbar {
-
-}
-
-.product_list {
-    margin: auto;
+/* .product_list {
+  margin: auto;
 }
 
 .login_info {
-    margin: auto;
+  margin: auto;
+} */
+
+.categorySorter {
+  height: 50px;
+  margin: auto;
+  border-style: solid;
+  border-color: #242424;
 }
-
-.categorySorter{
-    height: 50px;
-    margin: auto;
-    border-style: solid;
-    border-color: #242424;
-}
-
-
