@@ -11,38 +11,6 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
   const [cookies, setCookie] = useCookies(["token"]);
   const [emailError, setEmailError] = useState(false);
 
-  // const getUserData = async (id) => {
-  //   try {
-  //     const response = await fetch(`http://localhost:5179/Api/Users/${id}`, {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("Token")}`,
-  //       },
-  //     });
-  //     if (response.status === 200) {
-  //       const data = await response.json();
-  //       // console.log(data);
-  //       const fetchedUserData = userInfo;
-  //       fetchedUserData.id = data.id;
-  //       fetchedUserData.email = data.email;
-  //       fetchedUserData.role = data.role;
-  //       fetchedUserData.storeId = data.storeId;
-  //       console.log(
-  //         "////////////////////////////////////////////////////////////////"
-  //       );
-  //       setUserInfo(fetchedUserData);
-  //       console.log(userInfo);
-  //       console.log(
-  //         "////////////////////////////////////////////////////////////////"
-  //       );
-  //     } else {
-  //       console.log("Error:", response.statusText);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  //   console.log("hej");
-  // };
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -133,3 +101,36 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
 }
 
 export default LoginForm;
+
+// const getUserData = async (id) => {
+//   try {
+//     const response = await fetch(`http://localhost:5179/Api/Users/${id}`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("Token")}`,
+//       },
+//     });
+//     if (response.status === 200) {
+//       const data = await response.json();
+//       // console.log(data);
+//       const fetchedUserData = userInfo;
+//       fetchedUserData.id = data.id;
+//       fetchedUserData.email = data.email;
+//       fetchedUserData.role = data.role;
+//       fetchedUserData.storeId = data.storeId;
+//       console.log(
+//         "////////////////////////////////////////////////////////////////"
+//       );
+//       setUserInfo(fetchedUserData);
+//       console.log(userInfo);
+//       console.log(
+//         "////////////////////////////////////////////////////////////////"
+//       );
+//     } else {
+//       console.log("Error:", response.statusText);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+//   console.log("hej");
+// };

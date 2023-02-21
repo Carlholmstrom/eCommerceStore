@@ -33,6 +33,7 @@ function AddProductForm({ storeId }) {
       );
       if (response.ok) {
         console.log("Product added successfully");
+        alert("Product added successfully");
         setProduct({
           title: "",
           description: "",
@@ -43,6 +44,7 @@ function AddProductForm({ storeId }) {
         });
       } else {
         console.log("Error adding product");
+        alert("Error adding product");
       }
     }
   };

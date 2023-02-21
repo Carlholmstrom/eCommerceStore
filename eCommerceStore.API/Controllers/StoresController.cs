@@ -96,7 +96,46 @@ namespace eCommerceStore.API.Controllers
 
             return NoContent();
         }
+        
+        [HttpDelete("{storeId:int}")]
+        [ActionName("DeleteStoreAsync")]
+        [Authorize(Roles = "super-admin")]
+        public async Task<IActionResult> DeleteProductFromStoreAsync(int storeId)
+        {
+            if (!_storeRepository.StoreExists(storeId))
+            {
+                return NotFound();
+            }
 
+            var deletedProduct = await _storeRepository.DeleteAsync(storeId);
+
+            if (deletedProduct == null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        
+        [HttpPost]
+        [Authorize(Roles = "super-admin")]
+        public async Task<IActionResult> AddStoreAsync([FromBody] StoreCreateDto storeDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var store = new Store
+            {
+                Name = storeDto.Name,
+            };
+
+            var addedStore = await _storeRepository.AddAsync(store);
+
+            return CreatedAtAction("GetStoreAsync", new { id = addedStore.Id }, addedStore);
+        }
 
        
 
