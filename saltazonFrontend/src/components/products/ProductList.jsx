@@ -2,40 +2,20 @@ import React, { useState, useEffect } from "react";
 import Product from "./Product.jsx";
 import CategorySorter from "./CategorySorter.jsx";
 import { useCookies } from "react-cookie";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 
-const sorted = false;
+const PAGE_SIZE = 12;
 
 function sortByCategory(products) {
   console.log(products);
-  return products.sort(compareProductCategory);
-}
-
-function compareProductCategory(a, b) {
-  if (a.category < b.category) {
-    return -1;
-  }
-  if (a.category > b.category) {
-    return 1;
-  }
-  return 0;
-}
-
-function sortSomething(category) {
-  console.log("sorting things would be cool" + category);
+  return products.sort((a, b) => a.category.localeCompare(b.category));
 }
 
 function ProductList({ addToCart }) {
   const [productData, setProductData] = useState([]);
   const [cookies] = useCookies(["token"]);
+  const [productsToShow, setProductsToShow] = useState([]);
+  const [end, setEnd] = useState(PAGE_SIZE);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -56,21 +36,39 @@ function ProductList({ addToCart }) {
 
   console.log(productData.length);
 
-  let sortedProducts;
-  if (sorted) {
-    sortedProducts = sortByCategory(productData);
-  } else {
-    sortedProducts = productData;
-  }
+  const sortedProducts = sortByCategory(productData);
+
+  const handleLoadMore = () => {
+    setEnd(end + PAGE_SIZE);
+  };
+
+  useEffect(() => {
+    setProductsToShow(sortedProducts.slice(0, end));
+  }, [end, sortedProducts]);
+
+  const numProductsDisplayed = productsToShow.length;
+  const totalNumProducts = sortedProducts.length;
 
   return (
-    <Grid container spacing={2}>
-      {sortedProducts.map((p) => (
-        <Grid item xs={12} sm={6} md={4} key={p.id}>
-          <Product product={p} addToCart={addToCart} />
-        </Grid>
-      ))}
-    </Grid>
+    <>
+      <Typography variant="subtitle1">
+        Showing {numProductsDisplayed} out of {totalNumProducts} products
+      </Typography>
+      <Grid container spacing={2}>
+        {productsToShow.map((p) => (
+          <Grid item xs={12} sm={6} md={4} key={p.id}>
+            <Product product={p} addToCart={addToCart} />
+          </Grid>
+        ))}
+      </Grid>
+      {end < sortedProducts.length && (
+        <Box textAlign="center" mt={2}>
+          <Button variant="contained" onClick={handleLoadMore}>
+            Load More Products
+          </Button>
+        </Box>
+      )}
+    </>
   );
 }
 

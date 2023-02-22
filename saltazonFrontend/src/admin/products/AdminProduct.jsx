@@ -10,9 +10,11 @@ import {
   InputLabel,
   Input,
 } from "@mui/material";
+import { useState } from "react";
 
 function AdminProduct({ product, storeId }) {
   const [cookies] = useCookies(["token"]);
+  const [quantity, setQuantity] = useState(product.quantity);
 
   const handleDelete = async () => {
     const token = cookies.token;
@@ -36,12 +38,15 @@ function AdminProduct({ product, storeId }) {
       }
     }
   };
-
   const updateQuantity = async (id, quantity) => {
     const token = cookies.token;
     if (token) {
       console.log(token);
       console.log(quantity);
+      const newQuantity = parseInt(quantity);
+      console.log(newQuantity);
+      console.log("Efter new quantity");
+
       const response = await fetch(
         `http://localhost:5179/api/Products/${id}/quantity`,
         {
@@ -50,7 +55,7 @@ function AdminProduct({ product, storeId }) {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ quantity }),
+          body: newQuantity,
         }
       );
       if (response.ok) {
@@ -61,6 +66,9 @@ function AdminProduct({ product, storeId }) {
     }
   };
 
+  const handleQuantityChange = (event) => {
+    setQuantity(event.target.value);
+  };
   return (
     <Card sx={{ height: 400, maxWidth: 350, margin: 2, border: 1 }}>
       <CardMedia
@@ -83,8 +91,17 @@ function AdminProduct({ product, storeId }) {
           <Input
             id="quantity"
             type="number"
-            value={product.quantity}
-            // onChange={handleQuantityChange}
+            value={quantity}
+            sx={{ width: 75 }}
+            onChange={(e) => setQuantity(parseInt(e.target.value))}
+          />
+          <InputLabel htmlFor="price" sx={{ mr: 1, ml: 1.5 }}>
+            Price:
+          </InputLabel>
+          <Input
+            id="price"
+            type="text"
+            value={product.price}
             sx={{ width: 75 }}
           />
         </Box>

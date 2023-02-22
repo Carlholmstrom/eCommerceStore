@@ -13,12 +13,22 @@ public class ProductRepository : IProductsRepository
     public ProductRepository(AppDbContext context)
     {
         _context = context;
-    }
+    } 
+    
     public async Task<IEnumerable<Product>> GetAllAsync()
     {
         return await _context.Products.ToListAsync();
     }
+    
+    // public async Task<IEnumerable<Product>> GetAllAsync(int page, int pageSize)
+    // {
+    //     return await _context.Products
+    //         .Skip((page - 1) * pageSize)
+    //         .Take(pageSize)
+    //         .ToListAsync();
+    // }
 
+    
     public async Task<Product> GetAsync(int id)
     {
         return await _context.Products.FirstOrDefaultAsync(x => x.Id == id);

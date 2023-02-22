@@ -7,6 +7,7 @@ public interface IProductsRepository
 {
     Task<IEnumerable<Product>> GetAllAsync();
 
+    //Task<IEnumerable<Product>> GetAllAsync(int page, int pageSize);
     Task<Product> GetAsync(int id);
     Task<Product> UpdateQuantityAsync(int id, int newQuantity);
 

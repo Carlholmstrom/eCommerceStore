@@ -57,24 +57,24 @@ namespace eCommerceStore.API.Controllers
             return Ok(products);
         }
         
-        [HttpPost("{id:int}/product")]
+        [HttpPost("{storeId:int}/product")]
         [ActionName("AddProductToStoreAsync")]
         [Authorize(Roles = "admin, super-admin")]
-        public async Task<IActionResult> AddProductToStoreAsync(int id, [FromBody] ProductCreateDto productDto)
+        public async Task<IActionResult> AddProductToStoreAsync(int storeId, [FromBody] ProductCreateDto productDto)
         {
-            if (!_storeRepository.StoreExists(id))
+            if (!_storeRepository.StoreExists(storeId))
             {
                 return NotFound();
             }
 
-            // if (!ModelState.IsValid)
-            // {
-            //     return BadRequest(ModelState);
-            // }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            var addedProduct = await _storeRepository.AddProductToStoreAsync(id, productDto);
+            var addedProduct = await _storeRepository.AddProductToStoreAsync(storeId, productDto);
 
-            return CreatedAtAction("GetStoreProductsAsync", new { id = addedProduct.Id }, addedProduct);
+            return CreatedAtAction("GetProductAsync", "Products", new { id = addedProduct.Id }, addedProduct);
         }
 
         [HttpDelete("{storeId:int}/product/{id:int}")]
