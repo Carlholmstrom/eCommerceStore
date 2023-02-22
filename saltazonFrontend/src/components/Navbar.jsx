@@ -16,6 +16,7 @@ function NavBar() {
     <AppBar sx={{ mb: 3 }} position="static" style={{ background: "#2E3B55" }}>
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}></Typography>
+
         <Link
           to={"/"}
           style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}

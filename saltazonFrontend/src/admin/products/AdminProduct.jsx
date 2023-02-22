@@ -67,13 +67,19 @@ function AdminProduct({ product, storeId }) {
   };
 
   const handleQuantityChange = (event) => {
-    setQuantity(event.target.value);
+    const newQuantity = parseInt(event.target.value);
+    if (newQuantity < 0) {
+      setQuantity(0);
+    } else {
+      setQuantity(newQuantity);
+    }
   };
+
   return (
-    <Card sx={{ height: 400, maxWidth: 350, margin: 2, border: 1 }}>
+    <Card sx={{ maxHeight: 500, maxWidth: 350, margin: 2, border: 1 }}>
       <CardMedia
         component="img"
-        sx={{ height: "50%" }}
+        sx={{ height: "40%" }}
         image={product.imageUrl}
         alt={"picture of product"}
       />
@@ -82,7 +88,7 @@ function AdminProduct({ product, storeId }) {
           {product.title}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          {product.description.substring(0, 40) + "..."}
+          {product.description.substring(0, 30) + "..."}
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <InputLabel htmlFor="quantity" sx={{ mr: 1 }}>
@@ -93,8 +99,9 @@ function AdminProduct({ product, storeId }) {
             type="number"
             value={quantity}
             sx={{ width: 75 }}
-            onChange={(e) => setQuantity(parseInt(e.target.value))}
+            onChange={handleQuantityChange}
           />
+
           <InputLabel htmlFor="price" sx={{ mr: 1, ml: 1.5 }}>
             Price:
           </InputLabel>
