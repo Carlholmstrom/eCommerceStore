@@ -1,5 +1,6 @@
 using eCommerceStore.API.Data;
 using eCommerceStore.API.Dto;
+using eCommerceStore.API.Dto.Incoming;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
 using Microsoft.EntityFrameworkCore;

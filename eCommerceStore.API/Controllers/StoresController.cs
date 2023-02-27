@@ -1,4 +1,6 @@
 using eCommerceStore.API.Dto;
+using eCommerceStore.API.Dto.Incoming;
+using eCommerceStore.API.Dto.Outgoing;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -134,7 +136,12 @@ namespace eCommerceStore.API.Controllers
 
             var addedStore = await _storeRepository.AddAsync(store);
 
-            return CreatedAtAction("GetStoreAsync", new { id = addedStore.Id }, addedStore);
+            var storeResponseDto = new StoreDto
+            {
+                Name = addedStore.Name
+            };
+
+            return CreatedAtAction("GetStoreAsync", new { id = addedStore.Id }, storeResponseDto);
         }
 
        
