@@ -1,22 +1,27 @@
 import CartItem from "./CartItem.jsx";
 
-let sumOfItems = 0;
-function Cart({ productData, removeFromCart }) {
-  console.log(productData);
-  if (productData.length === 0) {
+function Cart({ currentCart, removeFromCart }) {
+  if (currentCart.amount === 0) {
     return <h3>No items in cart, why not add some?</h3>;
   }
+  //  += ( parseFloat(cartItem.product.price.replace('$', '')));
+  const sumOfItems = currentCart.cart.reduce((acc, cartItem) => {
+    const price = parseFloat(cartItem.product.price.replace("$", ""));
+    return acc + price * cartItem.amount;
+  }, 0);
   return (
     <div>
-      {productData.map((p) => {
-        sumOfItems += p.price * p.amount;
+      {currentCart.cart.map((cartItem) => {
         return (
-          <CartItem key={p.id} product={p} removeFromCart={removeFromCart} />
+          <CartItem
+            key={cartItem.product.id}
+            cartItem={cartItem}
+            removeFromCart={removeFromCart}
+          />
         );
       })}
-      <h3>Total price for items: {sumOfItems}</h3>
+      <h3>Total price for items: {sumOfItems.toFixed(2)}</h3>
     </div>
   );
 }
-
 export default Cart;

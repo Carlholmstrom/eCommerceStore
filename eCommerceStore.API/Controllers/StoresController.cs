@@ -20,7 +20,7 @@ namespace eCommerceStore.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "user, admin, super-admin")]
+        [Authorize(Roles = "admin, super-admin")]
         public async Task<IEnumerable<Store>> GetStoresAsync()
         {
             return await _storeRepository.GetAllAsync();
@@ -29,7 +29,7 @@ namespace eCommerceStore.API.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [ActionName("GetStoreAsync")]
-        [Authorize(Roles = "user, admin, super-admin")]
+        [Authorize(Roles = "admin, super-admin")]
         public async Task<IActionResult> GetStoreAsync(int id)
         {
             var store = await _storeRepository.GetAsync(id);
@@ -44,7 +44,7 @@ namespace eCommerceStore.API.Controllers
         
         [HttpGet("{id:int}/product")]
         [ActionName("GetStoreProductsAsync")]
-        [Authorize(Roles = "user, admin, super-admin")]
+        [Authorize(Roles = "admin, super-admin")]
         public async Task<IActionResult> GetStoreProductsAsync(int id)
         {
             if (!_storeRepository.StoreExists(id))

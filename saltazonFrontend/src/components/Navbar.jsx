@@ -2,13 +2,16 @@ import { Link, Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import ProfileBar from "./ProfileBar.jsx";
 
-function NavBar() {
+function NavBar({ token, setToken, userInfo }) {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     removeCookie("token");
+    setToken(null);
+    localStorage.clear();
     navigate("/login");
   };
 

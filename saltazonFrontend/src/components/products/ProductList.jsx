@@ -57,7 +57,7 @@ function ProductList({ addToCart }) {
       <Grid container spacing={2}>
         {productsToShow.map((p) => (
           <Grid item xs={12} sm={6} md={4} key={p.id}>
-            <Product product={p} addToCart={addToCart} />
+            <Product key={p.id} product={p} addToCart={addToCart} />
           </Grid>
         ))}
       </Grid>

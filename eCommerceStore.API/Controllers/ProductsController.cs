@@ -34,20 +34,6 @@ public class ProductsController : ControllerBase
     
         return Ok(products);
     }
-    //
-    // [HttpGet]
-    // [Authorize(Roles = "user, admin, super-admin")]
-    // [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
-    // public async Task<IActionResult> GetAllProductsAsync(int page = 1, int pageSize = 12)
-    // {
-    //     var products = await _productsRepository.GetAllAsync(page, pageSize);
-    //
-    //     if (!ModelState.IsValid)
-    //         return BadRequest();
-    //
-    //     return Ok(products);
-    // }
-
     
     [HttpGet]
     [Route("{id:int}")]

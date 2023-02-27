@@ -33,7 +33,7 @@ function Product({ product, addToCart }) {
         </Typography>
       </CardContent>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-        <Button variant="contained" onClick={() => addToCart(product.id)}>
+        <Button variant="contained" onClick={() => addToCart(product)}>
           Add to Cart
         </Button>
       </Box>

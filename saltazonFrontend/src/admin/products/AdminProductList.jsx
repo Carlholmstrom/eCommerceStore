@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
 import { Grid, Typography, Container } from "@mui/material";
 
-function AdminProductList({ storeName }) {
+function AdminProductList({ storeInfo }) {
   const [products, setProducts] = useState([]);
   const [cookies] = useCookies(["token"]);
   const token = cookies.token;
@@ -41,12 +41,11 @@ function AdminProductList({ storeName }) {
         direction="row"
         justifyContent="center"
         alignItems="center"
-        marginLeft={"50%"}
       >
         <Grid item xs={12}>
-          <Typography variant="h4" align="center" gutterBottom>
+          {/* <Typography variant="h4" align="center" gutterBottom>
             The items in {storeInfo.name}
-          </Typography>
+          </Typography> */}
         </Grid>
         <Grid item xs={12}>
           <AddProductForm />

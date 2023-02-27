@@ -5,7 +5,7 @@ import { TextField, Button } from "@mui/material";
 import validator from "validator";
 import "./login.css";
 
-function LoginForm({ onSubmit, userInfo, setUserInfo }) {
+function LoginForm({ onSubmit, setUserInfo }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +34,20 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
       });
       if (response.status === 200) {
         const token = await response.text();
-        onSubmit(token);
+        const [header, payload, signature] = token.split(".");
+        const decodedPayload = JSON.parse(
+          atob(payload.replace(/-/g, "+").replace(/_/g, "/"))
+        );
+        const id =
+          decodedPayload[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ];
+        const role =
+          decodedPayload[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          ];
+        onSubmit(token, role);
+        setUserInfo({ id, role });
         console.log(token);
         alert("Login success!");
         navigate("/");
@@ -44,16 +57,6 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
           maxAge: 3600, // expires in 1 hour
           sameSite: "strict",
         });
-
-        const [header, payload, signature] = token.split(".");
-        const decodedPayload = JSON.parse(
-          atob(payload.replace(/-/g, "+").replace(/_/g, "/"))
-        );
-        const id =
-          decodedPayload[
-            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-          ];
-        console.log(id);
       } else {
         alert("Login failed");
       }
@@ -62,6 +65,14 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
       alert("An error occurred while logging in");
     }
   };
+
+  function loading() {
+    return (
+      <div>
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -102,36 +113,3 @@ function LoginForm({ onSubmit, userInfo, setUserInfo }) {
 }
 
 export default LoginForm;
-
-// const getUserData = async (id) => {
-//   try {
-//     const response = await fetch(`http://localhost:5179/Api/Users/${id}`, {
-//       method: "GET",
-//       headers: {
-//         Authorization: `Bearer ${localStorage.getItem("Token")}`,
-//       },
-//     });
-//     if (response.status === 200) {
-//       const data = await response.json();
-//       // console.log(data);
-//       const fetchedUserData = userInfo;
-//       fetchedUserData.id = data.id;
-//       fetchedUserData.email = data.email;
-//       fetchedUserData.role = data.role;
-//       fetchedUserData.storeId = data.storeId;
-//       console.log(
-//         "////////////////////////////////////////////////////////////////"
-//       );
-//       setUserInfo(fetchedUserData);
-//       console.log(userInfo);
-//       console.log(
-//         "////////////////////////////////////////////////////////////////"
-//       );
-//     } else {
-//       console.log("Error:", response.statusText);
-//     }
-//   } catch (error) {
-//     console.error(error);
-//   }
-//   console.log("hej");
-// };

@@ -1,18 +1,18 @@
-import './Cart.css';
-function CartItem({product, removeFromCart}) {
+import "./Cart.css";
+function CartItem({ cartItem, removeFromCart }) {
+  const product = cartItem.product;
   return (
-      <article className={"cart_item"}>
-        <img src={product.imageUrl} alt={"picture of product"}/>
-        <section className={"text_section"}>
-          <h2>
-            {product.title}
-          </h2>
-          <h3>Amount {product.amount}</h3>
-          <h3>Price {product.price}</h3>
-        </section>
-        <button onClick={() => removeFromCart(product.id)}>Remove from Cart</button>
-      </article>
-  )
+    <article className={"cart_item"}>
+      <img src={product.imageUrl} alt={"picture of product"} />
+      <section className={"text_section"}>
+        <h2>{product.title}</h2>
+        <h3>Amount {cartItem.amount}</h3>
+        <h3>Price {product.price}</h3>
+      </section>
+      <button onClick={() => removeFromCart(product.id)}>
+        Remove from Cart
+      </button>
+    </article>
+  );
 }
-
 export default CartItem;

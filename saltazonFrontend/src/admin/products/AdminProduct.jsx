@@ -66,8 +66,8 @@ function AdminProduct({ product, storeId }) {
     }
   };
 
-  const handleQuantityChange = (event) => {
-    const newQuantity = parseInt(event.target.value);
+  const handleQuantityChange = (e) => {
+    const newQuantity = parseInt(e.target.value);
     if (newQuantity < 0) {
       setQuantity(0);
     } else {
