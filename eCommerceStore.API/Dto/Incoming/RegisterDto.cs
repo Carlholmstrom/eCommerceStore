@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace eCommerceStore.API.Dto;
+namespace eCommerceStore.API.Dto.Incoming;
 
 public class RegisterDto
 {
-    //public int Id { get; set; }
     [Required]
     [EmailAddress]
     public string Email { get; set; } = default!;

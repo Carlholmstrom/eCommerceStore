@@ -1,4 +1,5 @@
 using eCommerceStore.API.Dto;
+using eCommerceStore.API.Dto.Outgoing;
 using eCommerceStore.API.Models;
 
 namespace eCommerceStore.API.Interfaces;
@@ -6,7 +7,6 @@ namespace eCommerceStore.API.Interfaces;
 public interface IUserRepository
 {
     Task<User> AuthenticateAsync(string email, string password);
-    Task<IEnumerable<UserDto>> GetAllUsersWithStoreNameAsync();
     Task<List<User>> GetAllAsync();
     Task<User> GetUserByEmail(string email);
 
@@ -15,8 +15,6 @@ public interface IUserRepository
     Task<User> AddAsync(User user);
 
     Task<User> DeleteAsync(int id);
-
-    Task<User> UpdateAsync(int id, User user);
 
     bool UserExists(int id);
 }

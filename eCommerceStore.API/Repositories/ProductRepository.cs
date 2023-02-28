@@ -25,20 +25,25 @@ public class ProductRepository : IProductsRepository
         return await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<Product> UpdateQuantityAsync(int id, int newQuantity)
-    {
-        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+  public async Task<Product> UpdateQuantityAsync(int id, int newQuantity)
+  {
+      var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+  
+      if (product == null)
+      {
+          return null;
+      }
+  
+      product.Quantity = newQuantity;
+      await _context.SaveChangesAsync();
+  
+      return new Product
+      {
+          Quantity = product.Quantity,
+          Title = product.Title
+      };
+  }
 
-        if (product == null)
-        {
-            return null;
-        }
-
-        product.Quantity = newQuantity;
-        await _context.SaveChangesAsync();
-
-        return product;
-    }
 
 
     public async Task<Product> AddAsync(Product product)

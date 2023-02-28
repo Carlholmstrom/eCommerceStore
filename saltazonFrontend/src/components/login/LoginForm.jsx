@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { TextField, Button } from "@mui/material";
 import validator from "validator";
+import { toast } from "react-toastify";
 import "./login.css";
 
 function LoginForm({ onSubmit, setUserInfo }) {
@@ -49,7 +50,7 @@ function LoginForm({ onSubmit, setUserInfo }) {
         onSubmit(token, role);
         setUserInfo({ id, role });
         console.log(token);
-        alert("Login success!");
+        toast.success("Login success!");
         navigate("/");
 
         setCookie("token", token, {
@@ -62,17 +63,9 @@ function LoginForm({ onSubmit, setUserInfo }) {
       }
     } catch (error) {
       console.error(error);
-      alert("An error occurred while logging in");
+      toast.error("An error occurred while logging in");
     }
   };
-
-  function loading() {
-    return (
-      <div>
-        <h2>Loading...</h2>
-      </div>
-    );
-  }
 
   return (
     <>

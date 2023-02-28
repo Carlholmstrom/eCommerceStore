@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ProfileBar from "./ProfileBar.jsx";
 
-function NavBar({ token, setToken, userInfo }) {
+function NavBar({ token, setToken, userInfo, currentCart }) {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const navigate = useNavigate();
 
@@ -14,6 +14,11 @@ function NavBar({ token, setToken, userInfo }) {
     localStorage.clear();
     navigate("/login");
   };
+
+  const cartCount =
+    currentCart.cart.length > 0
+      ? currentCart.cart.reduce((total, item) => total + item.amount, 0)
+      : null;
 
   return (
     <AppBar sx={{ mb: 3 }} position="static" style={{ background: "#2E3B55" }}>
@@ -33,12 +38,14 @@ function NavBar({ token, setToken, userInfo }) {
         >
           Create new user
         </Link>
+
         <Link
           to={"/cart"}
           style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
         >
-          Go to cart
+          Cart {cartCount && `(${cartCount})`}
         </Link>
+
         {cookies.token ? (
           <>
             <Button color="inherit" onClick={() => handleLogout()}>

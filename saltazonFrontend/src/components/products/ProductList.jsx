@@ -7,15 +7,19 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 const PAGE_SIZE = 12;
 
 function sortByCategory(products) {
-  console.log(products);
   return products.sort((a, b) => a.category.localeCompare(b.category));
 }
 
 function ProductList({ addToCart }) {
   const [productData, setProductData] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cookies] = useCookies(["token"]);
   const [productsToShow, setProductsToShow] = useState([]);
   const [end, setEnd] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setIsLoggedIn(cookies.token != null);
+  }, [cookies]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,14 +31,13 @@ function ProductList({ addToCart }) {
           },
         });
         const data = await response.json();
-        console.log(data);
         setProductData(data);
       }
     };
-    fetchProducts();
-  }, [cookies]);
-
-  console.log(productData.length);
+    if (isLoggedIn) {
+      fetchProducts();
+    }
+  }, [cookies.token, isLoggedIn]);
 
   const sortedProducts = sortByCategory(productData);
 

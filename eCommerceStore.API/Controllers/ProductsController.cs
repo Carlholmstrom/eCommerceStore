@@ -1,6 +1,7 @@
 using AutoMapper;
 using eCommerceStore.API.Data;
 using eCommerceStore.API.Dto;
+using eCommerceStore.API.Dto.Outgoing;
 using eCommerceStore.API.Interfaces;
 using eCommerceStore.API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ namespace eCommerceStore.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProductsController : ControllerBase
 {
     private readonly IProductsRepository _productsRepository;
@@ -24,15 +26,11 @@ public class ProductsController : ControllerBase
     
     [HttpGet]
     [Authorize(Roles = "user, admin, super-admin")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
-    public async Task<IActionResult> GetAllProductsAsync()
+    public async Task<IEnumerable<ProductListDto>> GetAllProductsAsync()
     {
         var products = await _productsRepository.GetAllAsync();
-            
-        if (!ModelState.IsValid)
-            return BadRequest();
-    
-        return Ok(products);
+
+        return _mapper.Map<IEnumerable<ProductListDto>>(products);
     }
     
     [HttpGet]
@@ -46,24 +44,26 @@ public class ProductsController : ControllerBase
         {
             return NotFound();
         }
+        var returnedProduct = _mapper.Map<ProductListDto>(product);
 
-        return Ok(product);
+        return Ok(returnedProduct);
     }
-    
-    [HttpPut]
-    [Route("{id:int}/quantity")]
-    [Authorize(Roles = "admin, super-admin")]
-    public async Task<IActionResult> UpdateQuantityAsync(int id, [FromBody] int newQuantity)
-    {
-        var product = await _productsRepository.UpdateQuantityAsync(id, newQuantity);
+   [HttpPut]
+   [Route("{id:int}/quantity")]
+   [Authorize(Roles = "admin, super-admin")]
+   public async Task<IActionResult> UpdateQuantityAsync(int id, [FromBody] int newQuantity)
+   {
+       var product = await _productsRepository.UpdateQuantityAsync(id, newQuantity);
 
-        if (product == null)
-        {
-            return NotFound();
-        }
+       if (product == null)
+       {
+           return NotFound();
+       }
 
-        return Ok(product);
-    }
+       var productResponseDto = _mapper.Map<UpdatedProductDto>(product);
+
+       return Ok(productResponseDto);
+   }
 
  
 

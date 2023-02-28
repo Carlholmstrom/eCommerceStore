@@ -7,7 +7,7 @@ namespace eCommerceStore.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AuthController : Controller
+public class AuthController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
     private readonly ITokenHandler _tokenHandler;
