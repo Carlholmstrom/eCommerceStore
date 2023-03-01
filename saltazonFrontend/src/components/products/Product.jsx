@@ -13,7 +13,7 @@ function Product({ product, addToCart }) {
     <Card
       sx={{
         height: 350,
-        maxWidth: 350,
+        maxWidth: 400,
         margin: 2,
         border: 1,
       }}
@@ -25,7 +25,12 @@ function Product({ product, addToCart }) {
         alt={"picture of product"}
       />
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h6" component="div">
+        <Typography
+          sx={{ fontSize: 18 }}
+          gutterBottom
+          variant="h6"
+          component="div"
+        >
           {product.title}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>

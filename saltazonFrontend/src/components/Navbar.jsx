@@ -1,15 +1,15 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ProfileBar from "./ProfileBar.jsx";
+import Cookies from "js-cookie";
 
-function NavBar({ token, setToken, userInfo, currentCart }) {
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+function NavBar({ isAuthenticated, setToken, currentCart, role }) {
+  const [cookies, removeCookie] = useCookies(["token"]);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    removeCookie("token");
+    Cookies.remove("token");
     setToken(null);
     localStorage.clear();
     navigate("/login");
@@ -22,44 +22,68 @@ function NavBar({ token, setToken, userInfo, currentCart }) {
 
   return (
     <AppBar sx={{ mb: 3 }} position="static" style={{ background: "#2E3B55" }}>
-      <Toolbar>
-        <Typography variant="h6" style={{ flexGrow: 1 }}></Typography>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {isAuthenticated && (
+            <Link
+              to={"/"}
+              style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+            >
+              Show me all the items
+            </Link>
+          )}
+        </div>
 
-        <Link
-          to={"/"}
-          style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
-        >
-          Show me all the items
-        </Link>
+        <div>
+          {role === "admin" && (
+            <Link
+              to={"/admin"}
+              style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+            >
+              Admin
+            </Link>
+          )}
 
-        <Link
-          to={"/create-new-user"}
-          style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
-        >
-          Create new user
-        </Link>
+          {role === "super-admin" && (
+            <Link
+              to={"/admin/super"}
+              style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+            >
+              SuperAdmin
+            </Link>
+          )}
 
-        <Link
-          to={"/cart"}
-          style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
-        >
-          Cart {cartCount && `(${cartCount})`}
-        </Link>
-
-        {cookies.token ? (
-          <>
-            <Button color="inherit" onClick={() => handleLogout()}>
-              Logout
-            </Button>
-          </>
-        ) : (
           <Link
-            to={"/login"}
+            to={"/create-new-user"}
             style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
           >
-            Login
+            Create new user
           </Link>
-        )}
+
+          {isAuthenticated && (
+            <Link
+              to={"/cart"}
+              style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+            >
+              Cart {cartCount && `(${cartCount})`}
+            </Link>
+          )}
+
+          {isAuthenticated ? (
+            <>
+              <Button color="inherit" onClick={() => handleLogout()}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Link
+              to={"/login"}
+              style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+            >
+              Login
+            </Link>
+          )}
+        </div>
       </Toolbar>
     </AppBar>
   );

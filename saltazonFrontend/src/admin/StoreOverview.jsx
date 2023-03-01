@@ -1,26 +1,31 @@
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
+import { toast } from "react-toastify";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Typography,
   Button,
   Card,
   CardContent,
   CardActions,
+  CardMedia,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
+import { useState } from "react";
 
 function StoreOverview({ storeInfo }) {
   const [cookies] = useCookies(["token"]);
+  const [open, setOpen] = useState(false);
 
   const handleDelete = async () => {
     const token = cookies.token;
     if (token) {
-      console.log("heeeeeeej");
       const decodedToken = jwt_decode(token);
       const storeId = decodedToken.storeId;
-      console.log(storeId);
-      console.log(token);
-      console.log(storeInfo.id);
       const response = await fetch(
         `http://localhost:5179/api/Stores/${storeInfo.id}`,
         {
@@ -31,44 +36,58 @@ function StoreOverview({ storeInfo }) {
         }
       );
       if (response.ok) {
-        console.log("Store deleted successfully");
-        alert("Store deleted successfully");
+        toast.info("Store deleted successfully");
+        setOpen(false);
       } else {
-        console.log("Error deleting store");
-        alert("Error deleting store");
+        toast.error("Error deleting store");
       }
     }
   };
 
   return (
-    <div>
-      <h3>StoreName: {storeInfo.name}</h3>
-      <p>StoreId: {storeInfo.id}</p>
-      <Link to={`/admin/${storeInfo.id}`}>Go to {storeInfo.name}</Link>
-      <button onClick={handleDelete}>Delete store</button>
-    </div>
+    <Card
+      sx={{
+        maxWidth: 345,
+        margin: 2,
+      }}
+    >
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div" align="center">
+          StoreName: {storeInfo.name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" align="center">
+          StoreId: {storeInfo.id}
+        </Typography>
+      </CardContent>
+      <CardActions sx={{ justifyContent: "center" }}>
+        <Link to={`/admin/${storeInfo.id}`}>
+          <Button size="small" variant="outlined" sx={{ mr: 2, width: 200 }}>
+            Go to {storeInfo.name}
+          </Button>
+        </Link>
+        <Button
+          size="small"
+          sx={{ width: 100 }}
+          variant="outlined"
+          color="error"
+          startIcon={<DeleteIcon />}
+          onClick={() => setOpen(true)}
+        >
+          Delete
+        </Button>
+      </CardActions>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this store?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>No</Button>
+          <Button onClick={handleDelete}>Yes</Button>
+        </DialogActions>
+      </Dialog>
+    </Card>
   );
-
-  // return (
-  //   <Card sx={{ width: 300, height: 250, margin: 2 }}>
-  //     <CardContent>
-  //       <Typography variant="h5" gutterBottom>
-  //         StoreName: {storeInfo.name}
-  //       </Typography>
-  //       <Typography variant="body1" gutterBottom>
-  //         StoreId: {storeInfo.id}
-  //       </Typography>
-  //     </CardContent>
-  //     <CardActions>
-  //       <Link to={`/admin/${storeInfo.id}`} color="primary">
-  //         Go to {storeInfo.name}
-  //       </Link>
-  //       <Button variant="contained" onClick={handleDelete} sx={{ ml: 2 }}>
-  //         Delete store
-  //       </Button>
-  //     </CardActions>
-  //   </Card>
-  // );
 }
 
 export default StoreOverview;

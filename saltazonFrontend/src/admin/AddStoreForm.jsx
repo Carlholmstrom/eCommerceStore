@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import jwt_decode from "jwt-decode";
+import SendIcon from "@mui/icons-material/Send";
 import {
   TextField,
   Button,
@@ -24,7 +26,6 @@ function AddStoreForm({}) {
     e.preventDefault();
     const token = cookies.token;
     if (token) {
-      console.log(token);
       const response = await fetch(`http://localhost:5179/api/Stores/`, {
         method: "POST",
         headers: {
@@ -34,15 +35,13 @@ function AddStoreForm({}) {
         body: JSON.stringify(newStore),
       });
       if (response.ok) {
-        console.log("Store added successfully");
-        alert("Store added successfully");
+        toast.success("Store added successfully");
         navigate("/admin/super");
         setNewStore({
           name: "",
         });
       } else {
-        console.log("Error adding store");
-        alert("Error adding store");
+        toast.error("Error adding store");
       }
     }
   };
@@ -72,7 +71,8 @@ function AddStoreForm({}) {
             sx={{ margin: 2 }}
             type="submit"
             variant="contained"
-            color="primary"
+            color="success"
+            endIcon={<SendIcon />}
           >
             Add store
           </Button>

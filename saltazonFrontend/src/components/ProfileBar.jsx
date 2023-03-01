@@ -1,6 +1,7 @@
 import { useCookies } from "react-cookie";
+import { useEffect } from "react";
 
-function ProfileBar() {
+function ProfileBar({ isLoggedIn }) {
   const [cookies] = useCookies(["token"]);
   const userRole = cookies.token
     ? JSON.parse(atob(cookies.token.split(".")[1]))[
@@ -10,10 +11,14 @@ function ProfileBar() {
 
   return (
     <div className="login_info">
-      {userRole ? (
+      {isLoggedIn ? (
         <h1>Logged in as {userRole}</h1>
       ) : (
-        <h1>Welcome to the store</h1>
+        <>
+          <h1>Welcome to the store</h1>
+
+          <p>Please login or create a user to start shopping</p>
+        </>
       )}
     </div>
   );

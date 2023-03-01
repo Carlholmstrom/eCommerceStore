@@ -18,7 +18,6 @@ function SuperAdminPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       const token = cookies.token;
-      console.log(token);
       if (token) {
         const response = await fetch("http://localhost:5179/api/Stores", {
           headers: {
@@ -26,7 +25,6 @@ function SuperAdminPage() {
           },
         });
         const data = await response.json();
-        console.log(data);
         setStores(data);
       }
     };

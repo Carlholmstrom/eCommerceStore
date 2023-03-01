@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Typography } from "@mui/material";
 import validator from "validator";
 import { toast } from "react-toastify";
 import "./login.css";
+import SendIcon from "@mui/icons-material/Send";
 
 function LoginForm({ onSubmit, setUserInfo }) {
   const navigate = useNavigate();
@@ -69,7 +70,9 @@ function LoginForm({ onSubmit, setUserInfo }) {
 
   return (
     <>
-      <h3>Please login to start shopping</h3>
+      <Typography variant="h4" gutterBottom>
+        Login
+      </Typography>
       <form onSubmit={handleSubmit} className="login_form">
         <TextField
           sx={{ m: 1, width: 300 }}
@@ -83,7 +86,7 @@ function LoginForm({ onSubmit, setUserInfo }) {
         />
         <br />
         <TextField
-          sx={{ m: 1, width: 300 }}
+          sx={{ m: 1, mb: 3, width: 300 }}
           label="Password"
           type="password"
           placeholder="password"
@@ -93,12 +96,22 @@ function LoginForm({ onSubmit, setUserInfo }) {
         />
         <br />
         <Button
-          sx={{ m: 3, width: 300 }}
+          sx={{ mr: 1, width: 200 }}
           variant="contained"
-          color="primary"
+          color="success"
           type="submit"
+          endIcon={<SendIcon />}
         >
           Login
+        </Button>
+        <Button
+          sx={{ width: 100 }}
+          variant="contained"
+          color="primary"
+          component={Link}
+          to={"/"}
+        >
+          Back
         </Button>
       </form>
     </>

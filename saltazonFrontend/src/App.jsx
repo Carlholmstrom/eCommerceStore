@@ -15,7 +15,6 @@ import ProductList from "./components/Products/ProductList.jsx";
 import LoginForm from "./components/login/LoginForm.jsx";
 import NewUserForm from "./components/login/NewUserForm.jsx";
 import SuperAdminPage from "./admin/SuperAdminPage.jsx";
-import ProfileBar from "./components/ProfileBar.jsx";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -100,13 +99,25 @@ function App() {
         "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
       ]
     : null;
-  const isAuthenticated = authToken !== undefined && authToken !== null;
+  const isAuthenticated =
+    authToken !== undefined &&
+    authToken !== null &&
+    decodedToken &&
+    decodedToken.iss === "http://localhost:5179/";
+
+  console.log("role:", role);
 
   return (
     <div className="App">
       <Router>
         <header className={"top_header"}>
-          <NavBar token={token} setToken={setToken} currentCart={currentCart} />
+          <NavBar
+            token={token}
+            setToken={setToken}
+            currentCart={currentCart}
+            isAuthenticated={isAuthenticated}
+            role={role}
+          />
         </header>
         <main>
           <ToastContainer
@@ -123,7 +134,6 @@ function App() {
             icon={<CheckCircleIcon />}
             className="green__toast"
           />
-          <ProfileBar />
           <Routes>
             <Route
               exact
