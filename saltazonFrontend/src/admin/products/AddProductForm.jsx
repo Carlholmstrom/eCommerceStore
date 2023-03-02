@@ -56,7 +56,7 @@ function AddProductForm({ storeId }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container spacing={2} direction="column">
+      <Grid container spacing={2} sx={{ mt: 3 }} direction="column">
         <Grid item xs={12}>
           <Typography variant="h4" gutterBottom>
             Add new Product

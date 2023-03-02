@@ -13,9 +13,6 @@ function AdminProductList({ storeInfo }) {
   const isAdmin = decodedToken && decodedToken.storeId;
   const storeId = storeInfo?.id || decodedToken?.storeId || null;
 
-  console.log("StoreInfo", storeInfo);
-  console.log("Storeid", storeId);
-
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await fetch(
@@ -44,11 +41,6 @@ function AdminProductList({ storeInfo }) {
         justifyContent="center"
         alignItems="center"
       >
-        <Grid item xs={12}>
-          {/* <Typography variant="h4" align="center" gutterBottom>
-            The items in {storeInfo.name}
-          </Typography> */}
-        </Grid>
         <Grid item xs={12}>
           <AddProductForm />
         </Grid>

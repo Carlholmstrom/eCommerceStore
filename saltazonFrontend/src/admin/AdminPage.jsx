@@ -7,7 +7,7 @@ function AdminPage() {
 
   return (
     <>
-      <header>Welcome to the store!</header>
+      <h1>Welcome to your store!</h1>
       <AdminProductList storeId={storeId} />
     </>
   );

@@ -70,7 +70,7 @@ function NavBar({ isAuthenticated, setToken, currentCart, role }) {
             </Link>
           )}
 
-          {isAuthenticated ? (
+          {cookies.token ? (
             <>
               <Button color="inherit" onClick={() => handleLogout()}>
                 Logout

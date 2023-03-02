@@ -16,6 +16,7 @@ import LoginForm from "./components/login/LoginForm.jsx";
 import NewUserForm from "./components/login/NewUserForm.jsx";
 import SuperAdminPage from "./admin/SuperAdminPage.jsx";
 import AdminProductList from "./admin/products/AdminProductList.jsx";
+import useAuth from "./components/useAuth";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -28,6 +29,8 @@ function App() {
   const [productData, setProductData] = useState([]);
   const [currentCart, setCurrentCart] = useState({ cart: [] });
   const cookies = new Cookies();
+
+  //const { isAuthenticated, role } = useAuth();
 
   useEffect(() => {
     const getCurrentCart = () => {
@@ -67,25 +70,22 @@ function App() {
     }
   }
 
-  const removeFromCart = (productId) => {
+  const removeFromCart = (product) => {
     const index = currentCart.cart.findIndex(
-      (cartItem) => cartItem.product.id === productId
+      (cartItem) => cartItem.product === product
     );
+    console.log("Currentcart:", currentCart);
+    console.log("Index:", index);
     if (index !== -1) {
+      const updatedItems = [...currentCart.cart];
       if (currentCart.cart[index].amount > 1) {
-        const updatedItems = [...currentCart.cart];
         updatedItems[index].amount = currentCart.cart[index].amount - 1;
-        const updatedCart = { ...currentCart, cart: updatedItems };
-        setCurrentCart(updatedCart);
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
       } else {
-        const updatedItems = currentCart.cart.filter(
-          (cartItem) => cartItem.product.id !== productId
-        );
-        const updatedCart = { ...currentCart, cart: updatedItems };
-        setCurrentCart(updatedCart);
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
+        updatedItems.splice(index, 1);
       }
+      const updatedCart = { ...currentCart, cart: updatedItems };
+      setCurrentCart(updatedCart);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
     }
   };
 

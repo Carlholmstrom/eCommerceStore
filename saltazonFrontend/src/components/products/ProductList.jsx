@@ -163,9 +163,10 @@ function ProductList({ addToCart }) {
           </Grid>
         ))}
       </Grid>
+
       {end < filteredProducts.length && (
         <Box textAlign="center" mt={2}>
-          <Button variant="contained" onClick={handleLoadMore}>
+          <Button sx={{ m: 3 }} variant="contained" onClick={handleLoadMore}>
             Load More Products
           </Button>
         </Box>
