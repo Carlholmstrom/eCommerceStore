@@ -15,6 +15,7 @@ import ProductList from "./components/Products/ProductList.jsx";
 import LoginForm from "./components/login/LoginForm.jsx";
 import NewUserForm from "./components/login/NewUserForm.jsx";
 import SuperAdminPage from "./admin/SuperAdminPage.jsx";
+import AdminProductList from "./admin/products/AdminProductList.jsx";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -105,8 +106,6 @@ function App() {
     decodedToken &&
     decodedToken.iss === "http://localhost:5179/";
 
-  console.log("role:", role);
-
   return (
     <div className="App">
       <Router>
@@ -194,6 +193,7 @@ function App() {
             >
               <Route exact path="/admin" element={<AdminPage />}></Route>
             </Route>
+            <Route exact path="/admin/:storeId" component={AdminProductList} />
           </Routes>
         </main>
       </Router>

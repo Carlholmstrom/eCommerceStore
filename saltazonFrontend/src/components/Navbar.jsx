@@ -12,7 +12,7 @@ function NavBar({ isAuthenticated, setToken, currentCart, role }) {
     Cookies.remove("token");
     setToken(null);
     localStorage.clear();
-    navigate("/login");
+    navigate("/");
   };
 
   const cartCount =
@@ -29,7 +29,7 @@ function NavBar({ isAuthenticated, setToken, currentCart, role }) {
               to={"/"}
               style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
             >
-              Show me all the items
+              Products
             </Link>
           )}
         </div>
@@ -52,13 +52,14 @@ function NavBar({ isAuthenticated, setToken, currentCart, role }) {
               SuperAdmin
             </Link>
           )}
-
-          <Link
-            to={"/create-new-user"}
-            style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
-          >
-            Create new user
-          </Link>
+          {!isAuthenticated && (
+            <Link
+              to={"/create-new-user"}
+              style={{ color: "#FFF", textDecoration: "none", marginRight: 20 }}
+            >
+              Create new user
+            </Link>
+          )}
 
           {isAuthenticated && (
             <Link

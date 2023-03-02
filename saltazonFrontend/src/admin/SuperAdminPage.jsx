@@ -1,9 +1,10 @@
-import StoreOverview from "./StoreOverview.jsx";
-import AddStoreForm from "./AddStoreForm.jsx";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
 import { Typography, Button, Link, Grid } from "@mui/material";
+import StoreOverview from "./StoreOverview.jsx";
+import AddStoreForm from "./AddStoreForm.jsx";
+import AdminProductList from "../admin/products/AdminProductList";
 
 function SuperAdminPage() {
   const [stores, setStores] = useState([]);
@@ -14,6 +15,9 @@ function SuperAdminPage() {
     decodedToken[
       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
     ];
+
+  const [showProductList, setShowProductList] = useState(false);
+  const [selectedStoreId, setSelectedStoreId] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,6 +35,11 @@ function SuperAdminPage() {
     fetchProducts();
   }, [cookies]);
 
+  const handleStoreClick = (storeId) => {
+    setSelectedStoreId(storeId);
+    setShowProductList(true);
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -41,17 +50,27 @@ function SuperAdminPage() {
       <Grid item xs={12}>
         <AddStoreForm />
       </Grid>
-      {stores.map((store) => (
-        <Grid item key={store.id} xs={12} sm={6} md={4}>
-          <StoreOverview
-            storeInfo={{
-              id: store.id,
-              name: store.name,
-              adminId: store.adminId,
-            }}
-          />
+      {showProductList ? (
+        <Grid item xs={12}>
+          <Button variant="outlined" onClick={() => setShowProductList(false)}>
+            Back to Store list
+          </Button>
+          <AdminProductList storeInfo={{ id: selectedStoreId }} />
         </Grid>
-      ))}
+      ) : (
+        stores.map((store) => (
+          <Grid item key={store.id} xs={12} sm={6} md={4}>
+            <StoreOverview
+              storeInfo={{
+                id: store.id,
+                name: store.name,
+                adminId: store.adminId,
+              }}
+              onClick={() => handleStoreClick(store.id)}
+            />
+          </Grid>
+        ))
+      )}
     </Grid>
   );
 }

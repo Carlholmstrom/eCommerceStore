@@ -11,6 +11,7 @@ import {
   Input,
 } from "@mui/material";
 import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function AdminProduct({ product, storeId }) {
   const [cookies] = useCookies(["token"]);
@@ -121,8 +122,13 @@ function AdminProduct({ product, storeId }) {
         >
           Update quantity
         </Button>
-        <Button variant="contained" onClick={handleDelete}>
-          Delete product
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
+          onClick={handleDelete}
+        >
+          Delete
         </Button>
       </Box>
     </Card>

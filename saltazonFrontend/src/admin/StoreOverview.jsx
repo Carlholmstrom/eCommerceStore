@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-function StoreOverview({ storeInfo }) {
+function StoreOverview({ storeInfo, onClick }) {
   const [cookies] = useCookies(["token"]);
   const [open, setOpen] = useState(false);
 
@@ -44,6 +44,10 @@ function StoreOverview({ storeInfo }) {
     }
   };
 
+  const handleStoreClick = () => {
+    onClick(storeInfo.id);
+  };
+
   return (
     <Card
       sx={{
@@ -60,11 +64,15 @@ function StoreOverview({ storeInfo }) {
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: "center" }}>
-        <Link to={`/admin/${storeInfo.id}`}>
-          <Button size="small" variant="outlined" sx={{ mr: 2, width: 200 }}>
-            Go to {storeInfo.name}
-          </Button>
-        </Link>
+        <Button
+          size="small"
+          variant="outlined"
+          sx={{ mr: 2, width: 200 }}
+          onClick={handleStoreClick}
+        >
+          View Products
+        </Button>
+
         <Button
           size="small"
           sx={{ width: 100 }}

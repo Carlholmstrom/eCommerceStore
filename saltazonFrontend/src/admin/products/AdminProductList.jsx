@@ -10,22 +10,24 @@ function AdminProductList({ storeInfo }) {
   const [cookies] = useCookies(["token"]);
   const token = cookies.token;
   const decodedToken = token ? jwt_decode(token) : null;
-  const storeId = decodedToken ? decodedToken.storeId : null;
+  const isAdmin = decodedToken && decodedToken.storeId;
+  const storeId = storeInfo?.id || decodedToken?.storeId || null;
+
+  console.log("StoreInfo", storeInfo);
+  console.log("Storeid", storeId);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (storeId) {
-        const response = await fetch(
-          `http://localhost:5179/api/Stores/${storeId}/product`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setProducts(data);
-      }
+      const response = await fetch(
+        `http://localhost:5179/api/Stores/${storeId}/product`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setProducts(data);
     };
     fetchProducts();
   }, [storeId, token]);
