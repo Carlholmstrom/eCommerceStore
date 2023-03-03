@@ -28,6 +28,7 @@ Validation for email/password
 - .NET webAPI 
 - Entity Framework
 - Microsoft SQL Server
+- BCrypt for hashing passwords
 - JWT tokens
 
 ### Frontend Specific:
