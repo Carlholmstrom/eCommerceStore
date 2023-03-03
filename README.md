@@ -39,7 +39,6 @@ Validation for email/password
 ## Future improvements:
 
 - Adding order functionallity
-- Checkout page
 - Adding a checkout page
 
 ## Setup
