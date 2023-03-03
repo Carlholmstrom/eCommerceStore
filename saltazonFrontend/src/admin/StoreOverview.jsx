@@ -57,7 +57,7 @@ function StoreOverview({ storeInfo, onClick }) {
     >
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" align="center">
-          StoreName: {storeInfo.name}
+          {storeInfo.name}
         </Typography>
         <Typography variant="body2" color="text.secondary" align="center">
           StoreId: {storeInfo.id}

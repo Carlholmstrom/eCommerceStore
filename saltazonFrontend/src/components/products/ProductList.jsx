@@ -13,6 +13,7 @@ import {
   Select,
   MenuItem,
   Container,
+  useTheme,
 } from "@mui/material";
 
 const PAGE_SIZE = 12;
@@ -30,6 +31,7 @@ function ProductList({ addToCart }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     setIsLoggedIn(cookies.token != null);
@@ -93,7 +95,7 @@ function ProductList({ addToCart }) {
     >
       {!isLoggedIn && (
         <>
-          <Typography variant="h1" gutterBottom>
+          <Typography variant="h2" gutterBottom>
             Welcome!
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
@@ -102,7 +104,7 @@ function ProductList({ addToCart }) {
           <Box sx={{ mt: 2 }}>
             <Button
               variant="contained"
-              sx={{ mr: 2, width: 150 }}
+              sx={{ mr: 2, maxWidth: 150 }}
               component={Link}
               color="success"
               to={"/login"}

@@ -38,20 +38,4 @@ public class AppDbContext : DbContext
         
     }
     
-    // modelBuilder.Entity<List<string>>().HasNoKey();
-    //
-    // modelBuilder.Entity<User>()
-    //     .HasOne(u => u.Store)
-    //     .WithMany(s => s.Users)
-    //     .HasForeignKey(u => u.StoreId);
-    //
-    // modelBuilder.Entity<Store>()
-    //     .HasMany(s => s.Products)
-    //     .WithOne(p => p.Store)
-    //     .HasForeignKey(p => p.StoreId);
-
-    // modelBuilder.Entity<Product>()
-    //     .HasOne(p => p.Store)
-    //     .WithMany(s => s.Products)
-    //     .HasForeignKey(p => p.StoreId);
 }

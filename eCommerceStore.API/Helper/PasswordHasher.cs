@@ -1,31 +1,19 @@
-using System.Security.Cryptography;
-using System.Text;
+using BCrypt.Net;
 
-namespace eCommerceStore.API.Helper;
-
-public static class PasswordHasher
+namespace eCommerceStore.API.Helper
 {
-    private const int SaltLength = 16;
-
-    public static string HashPassword(string password)
+    public static class PasswordHasher
     {
-        byte[] salt = new byte[SaltLength];
-        using RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-        rng.GetBytes(salt);
+        private const int WorkFactor = 10;
 
-        byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-        byte[] saltedPasswordBytes = new byte[salt.Length + passwordBytes.Length];
-        Array.Copy(salt, 0, saltedPasswordBytes, 0, salt.Length);
-        Array.Copy(passwordBytes, 0, saltedPasswordBytes, salt.Length, passwordBytes.Length);
+        public static string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password, WorkFactor);
+        }
 
-        using SHA256 sha256 = SHA256.Create();
-        byte[] hashedBytes = sha256.ComputeHash(saltedPasswordBytes);
-        
-        byte[] saltedHashedBytes = new byte[salt.Length + hashedBytes.Length];
-        Array.Copy(salt, 0, saltedHashedBytes, 0, salt.Length);
-        Array.Copy(hashedBytes, 0, saltedHashedBytes, salt.Length, hashedBytes.Length);
-
-        string hashedPassword = Convert.ToBase64String(saltedHashedBytes);
-        return hashedPassword;
+        public static bool VerifyPassword(string password, string hash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hash);
+        }
     }
 }

@@ -3,7 +3,7 @@ import { useCookies } from "react-cookie";
 import jwt_decode from "jwt-decode";
 import { Grid, Typography, TextField, Button } from "@mui/material";
 
-function AddProductForm({ storeId }) {
+function AddProductForm({ superAdminStoreId }) {
   const [cookies] = useCookies(["token"]);
   const [product, setProduct] = useState({
     title: "",
@@ -19,7 +19,7 @@ function AddProductForm({ storeId }) {
     const token = cookies.token;
     if (token) {
       const decodedToken = jwt_decode(token);
-      const storeId = decodedToken.storeId;
+      const storeId = superAdminStoreId || decodedToken.storeId;
       console.log(storeId);
       const response = await fetch(
         `http://localhost:5179/api/Stores/${storeId}/product`,

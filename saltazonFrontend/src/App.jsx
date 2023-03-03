@@ -193,7 +193,6 @@ function App() {
             >
               <Route exact path="/admin" element={<AdminPage />}></Route>
             </Route>
-            <Route exact path="/admin/:storeId" component={AdminProductList} />
           </Routes>
         </main>
       </Router>

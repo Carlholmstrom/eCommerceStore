@@ -21,13 +21,8 @@ public class TokenHandler : ITokenHandler
         claims.Add(new Claim(ClaimTypes.Email, user.Email));
         claims.Add((new Claim(ClaimTypes.Role, user.Role)));
         claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-        claims.Add(new Claim("storeId", user.StoreId.ToString())); 
+        claims.Add(new Claim("storeId", user.StoreId.ToString()));
 
-        // user.Roles.ForEach((role) =>
-        // {
-        //     claims.Add(new Claim(ClaimTypes.Role, role));
-        // });
-        
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

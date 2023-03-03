@@ -1,5 +1,4 @@
 using AutoMapper;
-using eCommerceStore.API.Dto;
 using eCommerceStore.API.Dto.Incoming;
 using eCommerceStore.API.Dto.Outgoing;
 using eCommerceStore.API.Interfaces;
@@ -14,65 +13,56 @@ namespace eCommerceStore.API.Controllers
     public class StoresController : ControllerBase
     {
         private readonly IStoreRepository _storeRepository;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public StoresController(IStoreRepository storeRepository, IConfiguration configuration, IMapper mapper)
+        public StoresController(IStoreRepository storeRepository, IMapper mapper)
         {
             _storeRepository = storeRepository;
-            _configuration = configuration;
             _mapper = mapper;
         }
 
-       [HttpGet]
-       [Authorize(Roles = "admin, super-admin")]
-       public async Task<IEnumerable<StoreDto>> GetStoresAsync()
-       {
-           var stores = await _storeRepository.GetAllAsync();
-           return _mapper.Map<IEnumerable<StoreDto>>(stores);
-       }
-
-       [HttpGet]
-       [Route("{id:int}")]
-       [ActionName("GetStoreAsync")]
-       [Authorize(Roles = "admin, super-admin")]
-       public async Task<IActionResult> GetStoreAsync(int id)
-       {
-           var store = await _storeRepository.GetAsync(id);
-
-           if (store == null)
-           {
-               return NotFound();
-           }
-
-           var returnedStore = _mapper.Map<StoreDto>(store);
-
-           return Ok(returnedStore);
-       }
-
-        
-     [HttpGet("{id:int}/product")]
-     [ActionName("GetStoreProductsAsync")]
-     [Authorize(Roles = "admin, super-admin")]
-     public async Task<IActionResult> GetStoreProductsAsync(int id)
-     {
-         if (!_storeRepository.StoreExists(id))
-         {
-             return NotFound();
-         }
-     
-         var products = await _storeRepository.GetStoreProductsAsync(id);
-     
-         var productList = _mapper.Map<IEnumerable<ProductListDto>>(products);
-     
-         return Ok(productList);
-     }
-
-        
-        [HttpPost("{storeId:int}/product")]
-        [ActionName("AddProductToStoreAsync")]
+        [HttpGet]
         [Authorize(Roles = "admin, super-admin")]
-        public async Task<IActionResult> AddProductToStoreAsync(int storeId, [FromBody] ProductCreateDto productDto)
+        public async Task<IEnumerable<StoreDto>> GetAllAsync()
+        {
+            var stores = await _storeRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<StoreDto>>(stores);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetAsync(int id)
+        {
+            var store = await _storeRepository.GetAsync(id);
+
+            if (store == null)
+            {
+                return NotFound();
+            }
+
+            var returnedStore = _mapper.Map<StoreDto>(store);
+
+            return Ok(returnedStore);
+        }
+
+        [HttpGet("{id:int}/product")]
+        [Authorize(Roles = "admin, super-admin")]
+        public async Task<IActionResult> GetProductsAsync(int id)
+        {
+            if (!_storeRepository.StoreExists(id))
+            {
+                return NotFound();
+            }
+
+            var products = await _storeRepository.GetStoreProductsAsync(id);
+
+            var productList = _mapper.Map<IEnumerable<ProductListDto>>(products);
+
+            return Ok(productList);
+        }
+
+        [HttpPost("{storeId:int}/product")]
+        [Authorize(Roles = "admin, super-admin")]
+        public async Task<IActionResult> AddProductAsync(int storeId, [FromBody] ProductCreateDto productDto)
         {
             if (!_storeRepository.StoreExists(storeId))
             {
@@ -86,32 +76,30 @@ namespace eCommerceStore.API.Controllers
 
             var addedProduct = await _storeRepository.AddProductToStoreAsync(storeId, productDto);
 
-            return CreatedAtAction("GetProductAsync", "Products", new { id = addedProduct.Id }, addedProduct);
+            return CreatedAtAction(nameof(GetAsync), "Products", new { id = addedProduct.Id }, addedProduct);
         }
-        
+
         [HttpPost]
         [Authorize(Roles = "super-admin")]
-        public async Task<IActionResult> AddStoreAsync([FromBody] StoreCreateDto storeDto)
+        public async Task<IActionResult> AddAsync([FromBody] StoreCreateDto storeDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-       
+
             var store = _mapper.Map<Store>(storeDto);
-       
+
             var addedStore = await _storeRepository.AddAsync(store);
-       
+
             var storeResponseDto = _mapper.Map<StoreDto>(addedStore);
-       
-            return CreatedAtAction("GetStoreAsync", new { id = addedStore.Id }, storeResponseDto);
+
+            return CreatedAtAction("Get", new { id = addedStore.Id }, storeResponseDto);
         }
 
-
         [HttpDelete("{storeId:int}/product/{id:int}")]
-        [ActionName("DeleteProductFromStoreAsync")]
         [Authorize(Roles = "admin, super-admin")]
-        public async Task<IActionResult> DeleteProductFromStoreAsync(int storeId, int id)
+        public async Task<IActionResult> DeleteProductAsync(int storeId, int id)
         {
             if (!_storeRepository.StoreExists(storeId))
             {
@@ -127,26 +115,25 @@ namespace eCommerceStore.API.Controllers
 
             return NoContent();
         }
-        
+
         [HttpDelete("{storeId:int}")]
-        [ActionName("DeleteStoreAsync")]
         [Authorize(Roles = "super-admin")]
-        public async Task<IActionResult> DeleteProductFromStoreAsync(int storeId)
+        public async Task<IActionResult> DeleteAsync(int storeId)
         {
             if (!_storeRepository.StoreExists(storeId))
             {
                 return NotFound();
             }
 
-            var deletedProduct = await _storeRepository.DeleteAsync(storeId);
+            var deletedStore = await _storeRepository.DeleteAsync(storeId);
 
-            if (deletedProduct == null)
+            if (deletedStore == null)
             {
                 return NotFound();
             }
 
             return NoContent();
-        }
 
+        }
     }
 }

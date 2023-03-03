@@ -33,6 +33,11 @@ public class ProductRepository : IProductsRepository
       {
           return null;
       }
+      
+      if (newQuantity < 0)
+      {
+          throw new ArgumentException("New quantity cannot be negative.");
+      }
   
       product.Quantity = newQuantity;
       await _context.SaveChangesAsync();

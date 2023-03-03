@@ -1,40 +1,34 @@
-using eCommerceStore.API.Dto;
 using eCommerceStore.API.Dto.Incoming;
 using eCommerceStore.API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace eCommerceStore.API.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class AuthController : ControllerBase
+namespace eCommerceStore.API.Controllers
 {
-    private readonly IUserRepository _userRepository;
-    private readonly ITokenHandler _tokenHandler;
+    [ApiController]
+    [Route("[controller]")]
+    public class AuthController : ControllerBase
+    {
+        private readonly IUserRepository _userRepository;
+        private readonly ITokenHandler _tokenHandler;
 
-    public AuthController(IUserRepository userRepository, ITokenHandler tokenHandler)
-    {
-        _userRepository = userRepository;
-        _tokenHandler = tokenHandler;
-    }
-    
-    [HttpPost]
-    [Route("login")]
-    public async Task<IActionResult> LoginAsync(LoginDto loginDto)
-    {
-        if (loginDto == null)
+        public AuthController(IUserRepository userRepository, ITokenHandler tokenHandler)
         {
-            return BadRequest("Please provide valid credentials");
+            _userRepository = userRepository;
+            _tokenHandler = tokenHandler;
         }
-        var user = await _userRepository.AuthenticateAsync(
-            loginDto.Email, loginDto.Password);
-
-        if (user != null)
+        
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync(LoginDto loginDto)
         {
-            var token =  await _tokenHandler.CreateTokenAsync(user);
+            var user = await _userRepository.AuthenticateAsync(loginDto.Email, loginDto.Password);
+
+            if (user == null)
+            {
+                return BadRequest("Email and/or Password is incorrect");
+            }
+
+            var token = await _tokenHandler.CreateTokenAsync(user);
             return Ok(token);
         }
-
-        return BadRequest("Email and/or Password is incorrect");
     }
 }

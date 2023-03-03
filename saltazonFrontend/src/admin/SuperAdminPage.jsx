@@ -5,6 +5,7 @@ import { Typography, Button, Link, Grid } from "@mui/material";
 import StoreOverview from "./StoreOverview.jsx";
 import AddStoreForm from "./AddStoreForm.jsx";
 import AdminProductList from "../admin/products/AdminProductList";
+import AddProductForm from "../admin/products/AddProductForm";
 
 function SuperAdminPage() {
   const [stores, setStores] = useState([]);
@@ -40,11 +41,13 @@ function SuperAdminPage() {
     setShowProductList(true);
   };
 
+  console.log("SelectedStoreId", selectedStoreId);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography variant="h6" gutterBottom>
-          Welcome Almighty SuperAdmin: {currentUser}
+          {/* Welcome Almighty SuperAdmin: {currentUser} */}
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -55,7 +58,8 @@ function SuperAdminPage() {
           <Button variant="outlined" onClick={() => setShowProductList(false)}>
             Back to Store list
           </Button>
-          <AdminProductList storeInfo={{ id: selectedStoreId }} />
+          <AddProductForm superAdminStoreId={selectedStoreId} />
+          <AdminProductList storeId={{ id: selectedStoreId }} />
         </Grid>
       ) : (
         stores.map((store) => (

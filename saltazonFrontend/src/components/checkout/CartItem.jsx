@@ -16,7 +16,7 @@ function CartItem({ cartItem, removeFromCart }) {
   };
 
   return (
-    <Card sx={{ display: "flex", mb: 2, width: 600, margin: "auto" }}>
+    <Card sx={{ display: "flex", mb: 2, maxWidth: 600, margin: "auto" }}>
       <CardMedia
         component="img"
         sx={{ width: 150, minWidth: 80 }}
