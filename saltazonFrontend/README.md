@@ -1,2 +1,0 @@
-# saltazonFrontend
-saltazonFrontend
